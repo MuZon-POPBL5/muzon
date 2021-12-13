@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -29,15 +32,26 @@ public class User implements Serializable{
 	@GenericGenerator(name="native",strategy="native")
 	private Long id;
 
-	@Column
+	@Column 
+	@NotBlank
+	@Size(min=4, max=8, message="ERROR_SIZE_NOT_MET")
 	private String firstName;
-	@Column
+	
+	@Column 
+	@NotBlank
 	private String lastName;
-	@Column
+	
+	@Column(unique = true) 
+	@Email 
+	@NotBlank
 	private String email;
-	@Column
+	
+	@Column(unique = true) 
+	@NotBlank
 	private String username;
-	@Column
+	
+	@Column 
+	@NotBlank
 	private String password;
 
 	@Transient
