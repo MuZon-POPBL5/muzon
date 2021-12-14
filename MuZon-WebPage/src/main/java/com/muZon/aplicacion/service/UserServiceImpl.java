@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService{
 	public User changePassword(ChangePasswordForm form) throws Exception {
 		User user = getUserById(form.getId());
 		
-		if (!loggedUserAdmin() && !user.getPassword().equals(form.getCurrentPassword())) {
+		if (!isLoggedUserADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
 			throw new Exception ("Current Password invalido.");
 		}
 		
@@ -110,17 +110,16 @@ public class UserServiceImpl implements UserService{
 		return repository.save(user);
 	}
 
-	public boolean loggedUserAdmin() {
+	private boolean isLoggedUserADMIN() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails loggedUser = null;
-		Object roles = null; 
 		if (principal instanceof UserDetails) {
 			loggedUser = (UserDetails) principal;
-		
-			roles = loggedUser.getAuthorities().stream()
+
+			loggedUser.getAuthorities().stream()
 					.filter(x -> "ADMIN".equals(x.getAuthority() ))      
 					.findFirst().orElse(null); //loggedUser = null;
 		}
-		return roles != null ?true :false;
+		return loggedUser != null ?true :false;
 	}
 }
