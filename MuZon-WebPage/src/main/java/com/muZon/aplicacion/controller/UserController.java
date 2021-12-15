@@ -4,10 +4,15 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.muZon.aplicacion.dto.ChangePasswordForm;
 import com.muZon.aplicacion.entity.User;
+import com.muZon.aplicacion.exception.CustomeFieldValidationException;
 import com.muZon.aplicacion.repository.RoleRepository;
 import com.muZon.aplicacion.service.UserService;
+import com.muZon.aplicacion.entity.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +39,39 @@ public class UserController {
 	@GetMapping({"/", "/login"})
 	public String index() {
 		return "index";
+	}
+
+	@GetMapping("/signup")
+	public String signup(Model model) {
+		Role userRole = roleRepository.findByName("USER");
+		List<Role> roles = Arrays.asList(userRole);
+
+		model.addAttribute("signup",true);
+		model.addAttribute("userForm", new User());
+		model.addAttribute("roles",roles);
+		return "user-form/user-signup";
+	}
+
+	@PostMapping("/signup")
+	public String signupAction(@Valid @ModelAttribute("userForm")User user, BindingResult result, ModelMap model) {
+		Role userRole = roleRepository.findByName("USER");
+		List<Role> roles = Arrays.asList(userRole);
+		model.addAttribute("userForm", user);
+		model.addAttribute("roles",roles);
+		model.addAttribute("signup",true);
+
+		if(result.hasErrors()) {
+			return "user-form/user-signup";
+		}else {
+			try {
+				userService.createUser(user);
+			} catch (CustomeFieldValidationException cfve) {
+				result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+			}catch (Exception e) {
+				model.addAttribute("formErrorMessage",e.getMessage());
+			}
+		}
+		return index();
 	}
 	
 	@GetMapping("/userForm")
