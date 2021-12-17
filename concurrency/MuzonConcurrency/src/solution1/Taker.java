@@ -21,17 +21,13 @@ public class Taker extends Thread {
 		Random generador = new Random();
 		for (int i= 0; i < MAXTIMES; i++){
 			try {
+				emptyBuffer.acquire();
 				buffer.put(new Runnable () {
 					
 					@Override
 					public void run() {
-						if(account.deposit(generador.nextInt(1000))) {
-							fullBuffer.release();
-						}
-						else {
-							Thread.yield();
-						}
-						
+						account.deposit(generador.nextInt(1000));
+						fullBuffer.release();
 					}
 				});
 			} catch (InterruptedException e) {

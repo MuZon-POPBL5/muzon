@@ -20,12 +20,10 @@ public class Lefter extends Thread {
 	public void run(){
 		for (int i= 0; i < MAXTIMES; i++){
 			try {
+				fullBuffer.acquire();
 				if(account.isEmpty()) {
 					buffer.put(()->account.withdraw(account.getFirst()));
-				}
-				else {
-					fullBuffer.acquire();
-					i--;
+					emptyBuffer.release();
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

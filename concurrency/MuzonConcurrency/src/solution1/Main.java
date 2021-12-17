@@ -21,8 +21,8 @@ public class Main {
 		saverList = new Taker[MAXTHREADS];
 		spenderList = new Lefter[MAXTHREADS];
 		buffer = new Buffer(ACTIONSCAPACITY);
-		fullBuffer = new Semaphore(ROBOTCAPACITY);
-		emptyBuffer = new Semaphore(0);
+		fullBuffer = new Semaphore(0);
+		emptyBuffer = new Semaphore(ROBOTCAPACITY);
 		
 	}
 	public void createThreads(){
