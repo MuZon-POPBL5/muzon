@@ -39,9 +39,6 @@ public class User implements Serializable{
 	private String firstName;
 	@Column
 	@NotBlank
-	private String lastName;
-	@Column
-	@NotBlank
 	private String email;
 	@Column
 	@NotBlank
@@ -49,9 +46,6 @@ public class User implements Serializable{
 	@Column
 	@NotBlank
 	private String password;
-	
-	@Transient
-	private String confirmPassword;
 	
 	@Size(min=1)
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -85,14 +79,6 @@ public class User implements Serializable{
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -117,15 +103,6 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -136,8 +113,8 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", username=" + username + ", password=" + password + ", confirmPassword=" + confirmPassword
+		return "User [id=" + id + ", firstName=" + firstName  + ", email=" + email
+				+ ", username=" + username + ", password=" + password
 				+ ", roles=" + roles + "]";
 	}
 
@@ -145,11 +122,10 @@ public class User implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((confirmPassword == null) ? 0 : confirmPassword.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+	
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -165,11 +141,6 @@ public class User implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (confirmPassword == null) {
-			if (other.confirmPassword != null)
-				return false;
-		} else if (!confirmPassword.equals(other.confirmPassword))
-			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -184,11 +155,6 @@ public class User implements Serializable{
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
 			return false;
 		if (password == null) {
 			if (other.password != null)

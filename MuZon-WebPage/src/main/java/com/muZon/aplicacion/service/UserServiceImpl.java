@@ -36,22 +36,10 @@ public class UserServiceImpl implements UserService{
 		return true;
 	}
 
-	private boolean checkPasswordValid(User user) throws Exception {
-		if (user.getConfirmPassword() == null || user.getConfirmPassword().isEmpty()) {
-			throw new Exception("Confirm Password es obligatorio");
-		}
-		
-		if ( !user.getPassword().equals(user.getConfirmPassword())) {
-			throw new Exception("Password y Confirm Password no son iguales");
-		}
-		return true;
-	}
-
 
 	@Override
 	public User createUser(User user) throws Exception {
-		if (checkUsernameAvailable(user) && checkPasswordValid(user)) {
-	
+		if (checkUsernameAvailable(user)) {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			user = repository.save(user);
 		}
@@ -78,7 +66,6 @@ public class UserServiceImpl implements UserService{
 	protected void mapUser(User from,User to) {
 		to.setUsername(from.getUsername());
 		to.setFirstName(from.getFirstName());
-		to.setLastName(from.getLastName());
 		to.setEmail(from.getEmail());
 		to.setRoles(from.getRoles());
 	}

@@ -4,7 +4,6 @@
 		<tr>
 			<th scope="col">#</th>
 			<th scope="col">First</th>
-			<th scope="col">Last</th>
 			<th scope="col">Username</th>
 			<th scope="col">E-mail</th>
 			<th></th>
@@ -14,7 +13,6 @@
 		<tr th:each="user: ${userList}">
 			<td th:text="${user.id}"></td>
 			<td th:text="${user.firstName}"></td>
-			<td th:text="${user.lastName}"></td>
 			<td th:text="${user.username}"></td>
 			<td th:text="${user.email}"></td>
 			<td>
@@ -23,7 +21,7 @@
 				</span>
 				<span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" >
 					| <a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i class="fas fa-user-times"></i></a>
-				</span>
+				</span>	
 			</td>
 		</tr>
 		</tbody>
