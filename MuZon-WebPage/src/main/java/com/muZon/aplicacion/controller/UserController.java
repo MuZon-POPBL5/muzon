@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
+import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
 import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
@@ -66,8 +67,6 @@ public class UserController {
 		model.addAttribute("roles", roles);
 		model.addAttribute("signup", true);
 		
-		System.out.println(user.getFirstName() + user.getEmail() + user.getPassword() + user.getUsername() + user.getRoles());
-
 		try {
 			userService.createUser(user);
 		} catch (CustomeFieldValidationException cfve) {
@@ -87,6 +86,43 @@ public class UserController {
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
 		return "user-form/user-view";
+	}
+
+	@GetMapping("/selectAddress/{id}")
+	public String getShowAddressForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
+		User user = userService.getUserById(id);
+
+		model.addAttribute("userAddress", user);
+		model.addAttribute("addressForm", new ChangeAddressForm(id));
+		model.addAttribute("userForm", user);
+		model.addAttribute("editMode", "true");
+		model.addAttribute("passwordForm", new ChangePasswordForm(id));
+
+		return "user-form/address-form";
+	}
+
+	@GetMapping("/addressForm/cancel")
+	public String backFromShowAddress(ModelMap model) {
+		return "redirect:/userForm";
+	}
+
+	@GetMapping("/addressForm/add/{id}")
+	public String addAddressForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
+		User user = userService.getUserById(id);
+
+		model.addAttribute("userAddress", user);
+		model.addAttribute("addressActive", "true");
+		model.addAttribute("addressForm", new ChangeAddressForm(id));
+
+		model.addAttribute("userForm", user);
+		model.addAttribute("userList", userService.getAllUsers());
+		model.addAttribute("roles", roleRepository.findAll());
+		model.addAttribute("formTab", "active");
+		//model.addAttribute("editMode", "true");
+		//model.addAttribute("passwordForm", new ChangePasswordForm(id));
+
+		return "user-form/address-form";
+		//return "user-form/user-view";
 	}
 
 	@PostMapping("/userForm")
@@ -129,8 +165,6 @@ public class UserController {
 		return "user-form/user-view";
 	}
 
-	
-
 	@PostMapping("/editUser")
 	public String postEditUserForm(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
@@ -157,7 +191,6 @@ public class UserController {
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
 		return "user-form/user-view";
-
 	}
 
 	@GetMapping("/userForm/cancel")
@@ -186,6 +219,23 @@ public class UserController {
 				throw new Exception(result);
 			}
 			userService.changePassword(form);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok("Success");
+	}
+
+	@PostMapping("/editUser/addAddress")
+	public ResponseEntity<?> postAddAddress(@Valid @RequestBody ChangeAddressForm form, Errors errors) {
+		try {
+			if (errors.hasErrors()) {
+				String result = errors.getAllErrors()
+						.stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(""));
+
+				throw new Exception(result);
+			}
+			userService.changeAddress(form);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

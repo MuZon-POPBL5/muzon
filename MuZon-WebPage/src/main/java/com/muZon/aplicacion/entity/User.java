@@ -18,24 +18,22 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
-@Entity 
-public class User implements Serializable{
+@Entity
+public class User implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1671417246199538663L;
 
-
-
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO, generator="native")
-	@GenericGenerator(name="native",strategy="native")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
 	private Long id;
-	
+
 	@Column
 	@NotBlank
-	@Size(min=5,max=8,message="No se cumple las reglas del tamano")
+	@Size(min = 5, max = 8, message = "No se cumple las reglas del tamano")
 	private String firstName;
 	@Column
 	@NotBlank
@@ -46,12 +44,13 @@ public class User implements Serializable{
 	@Column
 	@NotBlank
 	private String password;
-	
-	@Size(min=1)
+	@Column
+	@NotBlank
+	private String address;
+
+	@Size(min = 1)
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles",
-			joinColumns=@JoinColumn(name="user_id"),
-			inverseJoinColumns=@JoinColumn(name="role_id"))
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
 	public User() {
@@ -103,6 +102,14 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -113,9 +120,9 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName  + ", email=" + email
+		return "User [id=" + id + ", firstName=" + firstName + ", email=" + email
 				+ ", username=" + username + ", password=" + password
-				+ ", roles=" + roles + "]";
+				+ ", roles=" + roles + ", address" + address + "]";
 	}
 
 	@Override
@@ -125,10 +132,11 @@ public class User implements Serializable{
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-	
+
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		return result;
 	}
 
@@ -171,7 +179,11 @@ public class User implements Serializable{
 				return false;
 		} else if (!username.equals(other.username))
 			return false;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
 		return true;
 	}
-
 }

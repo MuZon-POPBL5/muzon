@@ -4,15 +4,9 @@
 			<tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
 				<span
 					th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
-					<button type="submit" class="container btn btn-outline-primary btn-dark-teal mb-4">
-						<a class="text-decoration-none" href="#" th:href="@{'/editUser/'+ ${user.id}}">Mi Cuenta</a>
-					</button>
-					<button type="submit" class="container btn btn-outline-primary btn-dark-teal mb-4">
-						<a class="text-decoration-none text-dark" href="#" th:href="@{'/editAddress/'+ ${user.id}}">Elige tu dirección</a>
-					</button>
-					<button type="submit" class="container btn btn-outline-primary btn-dark-teal">
-						<a class="text-decoration-none text-dark" href="#" th:href="@{'/editUser/'+ ${user.id}}">Mi Cuenta</a>
-					</button>
+						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4" href="#" th:href="@{'/editUser/'+ ${user.id}}">Mi Cuenta</a>
+						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark" href="#" th:href="@{'/selectAddress/'+ ${user.id}}">Elige tu dirección</a>
+						<a class="container btn btn-outline-primary btn-dark-teal text-decoration-none text-dark" href="#" th:href="@{'/editUser/'+ ${user.id}}">Mi Cuenta</a>
 				</span>
 			</tr>
 		</tbody>
