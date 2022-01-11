@@ -49,6 +49,10 @@
 						aria-controls="form" aria-selected="true">Form</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" th:if="${#authorization.expression('hasRole(''USER'')')}" th:classappend=" ${userTab}" id="user-tab" data-toggle="tab" href="#uShop"
+						role="tab" aria-controls="list" aria-selected="false"><i class="fas fa-home"></i></a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" th:if="${#authorization.expression('hasRole(''USER'')')}" th:classappend=" ${userTab}" id="user-tab" data-toggle="tab" href="#uList"
 						role="tab" aria-controls="list" aria-selected="false"><i class="fa fa-user"></i></a>
 				</li>
@@ -65,6 +69,14 @@
 						</div>
 						<div class="card-body">
 							<div th:include="user-form/user-list.html" th:remove="tag"></div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade show" th:if="${#authorization.expression('hasRole(''USER'')')}" th:classappend=" ${userTab}" id="uShop" role="tabpanel"
+					aria-labelledby="list-tab">
+					<div class="card">
+						<div class="card-body">
+							<div th:include="user-form/shop.html" th:remove="tag"></div>
 						</div>
 					</div>
 				</div>
