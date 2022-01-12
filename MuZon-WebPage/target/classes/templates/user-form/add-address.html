@@ -1,5 +1,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
 <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalTitle"
   aria-hidden="true">
@@ -16,90 +16,7 @@
           <input class="form-control" type="hidden" th:field="${addressForm.id}">
           <div class="col-12">
             <input class="form-control" type="text" th:field="${addressForm.newAddress}">
-            <div class="alert-danger" th:if="${#fields.hasErrors('newAddress')}" th:errors="*{newAddress}">New Address
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" onClick="submitAddAddress()" class="btn btn-primary">Save changes</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="text/javascript">
-  function submitAddAddress() {
-    System.out.println("dadsadadadadasa");
-    var params = {};
-    params["id"] = $("#id").val();
-    params["newAddress"] = $("#newAddress").val();
-
-    $.ajax({
-      type: "POST",
-      contentType: "application/json",
-      url: "/editUser/addAddress",
-      data: JSON.stringify(params),
-      dataType: 'text',
-      cache: false,
-      timeout: 600000,
-      success: function (data) {
-        $("#addAddressForm")[0].reset();
-
-        $("#addAddressError").addClass("d-none");
-        $("#formSuccess").removeClass("d-none");
-        $("#formSuccess").html("Password Actualizado exitosmante!.");
-
-        $('#addAddressModal').modal('toggle');
-        setTimeout(function () { $("#formSuccess").hide('slow'); }, 2000);
-      },
-      error: function (e) {
-        $("#addAddressError").removeClass("d-none");
-        $("#formSuccess").addClass("d-none");
-        $("#addAddressError").html(e.responseText);
-      }
-    });
-
-  }
-</script>
-
-
-
-
-<!--
-  
-<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addAddressLongModal">Add Address</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">x</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="addAddressForm" th:object="${addressForm}" method="post" class="form" role="form">
-          <input class="form-control" type="hidden" th:field="${addressForm.id}">
-          <div class="col-12">
-            <input class="form-control" type="text" th:field="${addressForm.newCity}" required>
-            <div class="alert-danger" th:if="${#fields.hasErrors('newCity')}" th:errors="*{newCity">City</div>
-          </div>
-
-          <div class="col-12">
-            <input class="form-control" type="text" th:field="${addressForm.newAddress}" required>
-            <div class="alert-danger" th:if="${#fields.hasErrors('newAddress')}" th:errors="*{newAddress}">Street Address</div>
-          </div>
-
-          <div class="col-12">
-            <input class="form-control" type="text" th:field="${addressForm.newZipCode}" required>
-            <div class="alert-danger" th:if="${#fields.hasErrors('newZipCode')}" th:errors="*{newZip}">Zip Code</div>
-          </div>
-
-          <div class="col-12">
-            <input class="form-control" type="text" th:field="${addressForm.newCountry}" required>
-            <div class="alert-danger" th:if="${#fields.hasErrors('newCountry')}" th:errors="*{newCountry}">Country</div>
+            <div class="alert-danger" th:if="${#fields.hasErrors('newAddress')}" th:errors="*{newAddress}">New Address</div>
           </div>
       </div>
       </form>
@@ -115,10 +32,7 @@
   function submitAddAddress() {
     var params = {};
     params["id"] = $("#id").val();
-    params["newCity"] = $("#newCity").val();
     params["newAddress"] = $("#newAddress").val();
-    params["newZipCode"] = $("#newZipCode").val();
-    params["newCountry"] = $("#newCountry").val();
 
     $.ajax({
       type: "POST",
@@ -147,4 +61,3 @@
 
   }
 </script>
--->

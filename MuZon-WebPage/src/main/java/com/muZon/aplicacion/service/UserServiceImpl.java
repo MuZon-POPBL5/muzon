@@ -113,11 +113,10 @@ public class UserServiceImpl implements UserService{
 		return repository.save(user);
 	}
 
-
 	@Override
 	public User changeAddress(ChangeAddressForm form) throws Exception {
 		User user = getUserById(form.getId());
-		System.out.println(form.getNewAddress());
+		
 		user.setAddress(form.getNewAddress());
 		//user.setAddress("c " + form.getNewAddress() + form.getNewCity() + ", " + form.getNewZipCode() + ", " + form.getNewCountry());
 		return repository.save(user);

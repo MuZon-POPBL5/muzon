@@ -8,17 +8,8 @@ public class ChangeAddressForm {
 	@NotNull
 	private Long id;
 
-	@NotBlank(message="Address must not be blank")
+	@NotBlank(message="New Address must not be blank")
 	private String newAddress;
-
-	@NotBlank(message="Country must not be blank")
-	private String newCountry;
-
-	@NotBlank(message="Zip Code must not be blank")
-	private int newZipCode;
-
-	@NotBlank(message="City must not be blank")
-	private String newCity;
 
 	public ChangeAddressForm() { }
 	public ChangeAddressForm(Long id) {this.id = id;}
@@ -35,27 +26,6 @@ public class ChangeAddressForm {
 	public void setNewAddress(String newAddress) {
 		this.newAddress = newAddress;
 	}
-
-	public String getNewCity() {
-		return newCity;
-	}
-	public void setNewCity(String newCity) {
-		this.newCity = newCity;
-	}
-
-	public int getNewZipCode() {
-		return newZipCode;
-	}
-	public void setNewZipCode(int newZipCode) {
-		this.newZipCode = newZipCode;
-	}
-
-	public String getNewCountry() {
-		return newCountry;
-	}
-	public void setNewCountry(String newCountry) {
-		this.newCountry = newCountry;
-	}
 	
 	@Override
 	public int hashCode() {
@@ -63,9 +33,6 @@ public class ChangeAddressForm {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((newAddress == null) ? 0 : newAddress.hashCode());
-		result = prime * result + ((newCity == null) ? 0 : newCity.hashCode());
-		result = prime * result + ((newCountry == null) ? 0 : newCountry.hashCode());
-		result = prime * result + ((newZipCode == 0) ? 0 : newZipCode);
 		return result;
 	}
 	@Override
@@ -88,26 +55,11 @@ public class ChangeAddressForm {
 				return false;
 		} else if (!newAddress.equals(other.newAddress))
 			return false;
-		if (newCity == null) {
-			if (other.newCity != null)
-				return false;
-		} else if (!newCity.equals(other.newCity))
-			return false;
-		if (newCountry == null) {
-			if (other.newCountry != null)
-				return false;
-		} else if (!newCountry.equals(other.newCountry))
-			return false;
-		if (newZipCode == -1) {
-			if (other.newZipCode != -1)
-				return false;
-		} else if (newZipCode != other.newZipCode)
-			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "ChangePasswordForm [id=" + id +  ", newPassword=" + newAddress +  ", newCity=" + newCity
-				+  ", newCountry=" + newCountry  + ", newZipCode=" + newZipCode + "]";
+		return "ChangePasswordForm [id=" + id +  ", newPassword=" + newAddress
+				 + "]";
 	}
 }
