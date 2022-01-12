@@ -4,66 +4,78 @@
 		<form class="form" role="form" autocomplete="off" th:object="${userForm}" th:action="@{/signup}" method="post">
 
 			<div class="form-group row">
-				<div class="form-group mb-2">
-					<div class="input-group">
-						<input class="form-control" type="text" th:field="${userForm.firstName}"
-							th:disabled="${disableFields}" placeholder="Name">
+				<div class="form-group">
+					<div class="form-floating mb-1">
+						<input class="form-control" id="floatingInput" type="text" th:field="${userForm.firstName}"
+						th:disabled="${disableFields}">
+							<label for="floatingInput">Name</label>
 						<div class="alert-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name
 							Error</div>
-					</div>
-	
-				</div>				
-			</div>
-			<div class="form-group row">
-				<div class="form-group mb-2">
-					<div class="input-group">						
-						<input class="form-control" type="email" th:field="${userForm.email}"
-							th:disabled="${disableFields}" placeholder="Email">
-						<div class="alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error</div>
-					</div>
+					</div>					
 				</div>
 			</div>
 			<div class="form-group row">
-				<div class="form-group mb-2">
-					<input class="form-control" type="text" th:field="${userForm.username}"
-						th:disabled="${disableFields}" placeholder="Username">
-					<div class="alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name
-						Error</div>
+				<div class="form-group">
+					<div class="form-floating mb-1">
+						<input class="form-control" id="floatingInput" type="email" th:field="${userForm.email}"
+							th:disabled="${disableFields}">
+							<label for="floatingInput">Email</label>
+						<div class="alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error
+						</div>
+					</div>					
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="form-group">
+					<div class="form-floating mb-1">
+						<input class="form-control" id="floatingInput" type="text" th:field="${userForm.username}"
+						th:disabled="${disableFields}">
+							<label for="floatingInput">Username</label>
+							<div class="alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name
+								Error</div>
+					</div>					
 				</div>
 			</div>
 			<div class="form-group row" th:if="${editMode==null or editMode==false}">
-				<div class="form-group mb-2">
-					<input class="form-control" type="password" th:field="${userForm.password}"
-						th:disabled="${disableFields}" placeholder="Password">
+				<div class="form-group">
+					<div class="form-floating mb-1">
+						<input class="form-control" id="floatingInput" type="password" th:field="${userForm.password}"
+						th:disabled="${disableFields}">
+						<label for="floatingInput">Password</label>
 					<div class="alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name
 						Error</div>
+					</div>
 				</div>
 			</div>
 			<div class="form-group row">
-				<div class="form-group mb-2">
-					<input class="form-control" type="text" th:field="${userForm.address}"
-						th:disabled="${disableFields}" placeholder="Address">
+				<div class="form-group">
+					<div class="form-floating mb-1">
+						<input class="form-control" id="floatingInput" type="text" th:field="${userForm.address}"
+						th:disabled="${disableFields}">
+						<label for="floatingInput">Address</label>
 					<div class="alert-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Name
 						Error</div>
+					</div>
 				</div>
 			</div>
 			<div class="form-group row">
-                <div class="d-flex justify-content-center mt-4 mb-2">
+				<div class="d-flex justify-content-center mt-4 mb-2">
 					<a class="btn btn-secondary" th:href="@{'/'}">Back</a>
-                    <input type="submit" class="btn btn-primary" value="Register">
-                </div>
+					<input type="submit" class="btn btn-primary" value="Register">
+				</div>
 
 				<div class="form-group row d-none">
-                    <div class="form-group mb-2">
-                        <select class="form-control" th:size="${signup}?1:3" th:field="${userForm.roles}"
-                            th:disabled="${disableFields}">
-                            <option th:each="role :${roles}" th:value="${role.id}" th:text="${role.name}">
-                            </option>
-                        </select>
-                        <div class="alert-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name Error
-                        </div>
-                    </div>
-                </div>
+					<div class="form-group mb-2">
+						<select class="form-control" th:size="${signup}?1:3" th:field="${userForm.roles}"
+							th:disabled="${disableFields}">
+							<option th:each="role :${roles}" th:value="${role.id}" th:text="${role.name}">
+							</option>
+						</select>
+						<div class="alert-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name Error
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="alert alert-danger text-center" th:if="${formErrorMessage}" th:text="${formErrorMessage}">Error
 				MEssage</div>
@@ -71,5 +83,5 @@
 			</div>
 		</form>
 	</div>
-    <p class="text-center">Already have an account? <a href="#" th:href="@{/signin}">Sign In</a></p>
+	<p class="text-center">Already have an account? <a href="#" th:href="@{/signin}">Sign In</a></p>
 </div>

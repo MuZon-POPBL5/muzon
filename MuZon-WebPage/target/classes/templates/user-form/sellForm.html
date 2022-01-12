@@ -1,7 +1,7 @@
 <div th:with="disableFields=!${editMode} and ${#authorization.expression('hasRole(''ROLE_USER'')')}">
 
 	<div class="d-flex justify-content-center container">
-		<form class="form" role="form" autocomplete="off" th:object="${userForm}" th:action="@{/signup}" method="post">
+		<form class="form" role="form" autocomplete="off" th:object="${productForm}" th:action="@{/addProduct}" method="post">
 
 			<div class="form-group row">
 				<div class="form-group">
@@ -83,5 +83,4 @@
 			</div>
 		</form>
 	</div>
-	<p class="text-center">Already have an account? <a href="#" th:href="@{/signin}">Sign In</a></p>
 </div>

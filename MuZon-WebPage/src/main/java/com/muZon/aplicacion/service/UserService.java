@@ -19,5 +19,7 @@ public interface UserService {
 	
 	public User changePassword(ChangePasswordForm form) throws Exception;
 
+	public User changePasswordById(Long id, String newPassword, String confirmPassowrd) throws Exception;
+
 	public User changeAddress(ChangeAddressForm form) throws Exception;
 }

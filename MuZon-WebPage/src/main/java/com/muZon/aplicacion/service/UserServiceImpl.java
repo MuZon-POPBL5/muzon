@@ -98,10 +98,28 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	public User changePasswordById(Long id, String newPassword, String confirmPassowrd) throws Exception {
+		User user = getUserById(id);
+		
+		if( user.getPassword().equals(newPassword)) {
+			throw new Exception ("Nuevo debe ser diferente al password actual.");
+		}
+		
+		if( !newPassword.equals(confirmPassowrd)) {
+			throw new Exception ("Nuevo Password y Current Password no coinciden.");
+		}
+		String encodedPassword = bCryptPasswordEncoder.encode(confirmPassowrd);
+		user.setPassword(encodedPassword);
+		return repository.save(user);
+	}
+
+
+	@Override
 	public User changeAddress(ChangeAddressForm form) throws Exception {
 		User user = getUserById(form.getId());
-		
+		System.out.println(form.getNewAddress());
 		user.setAddress(form.getNewAddress());
+		//user.setAddress("c " + form.getNewAddress() + form.getNewCity() + ", " + form.getNewZipCode() + ", " + form.getNewCountry());
 		return repository.save(user);
 	}
 

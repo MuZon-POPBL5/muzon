@@ -36,28 +36,29 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="d-flex justify-content-around flex-wrap mb-3">
-            <div class="card">
-                <div class="form-group">
-                    <div class="input-group center">
-                        <i class="fas fa-map-marker-alt text-center"></i>
-                        <input class="form-control-plaintext text-center" type="text" readonly
-                            th:field="${userAddress.address}">
-                    </div>
+    <div class="container px-5">
+        <div id="myTab" role="tablist">
+            <div class="container-fluid row pt-2">
+                <div class="col-1">
+                    <a class="btn btn-secondary" th:href="@{'/addressForm/cancel'}">Back</a>
+                </div>
+                <div class="col-11 text-center">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" th:if="${editMode}"
+                        data-target="#addAddressModal">New Address</button>
                 </div>
             </div>
-        </div>
-    
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <a class="btn btn-secondary" th:href="@{'/addressForm/cancel'}">Back</a>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" th:if="${editMode}"
-                                data-target="#addAddressModal">New Address</button>
+            <div class="container-fluid mt-4">
+                <ul class="list-group list-group-flush m-0">
+                    <li class="list-group-item d-inline-flex m-0 p-0">
+                            <input class="form-control-plaintext ml-1" type="text" readonly
+                                th:field="${userAddress.address}">
+                        <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value="1" checked>
+                    </li>
+                    <li class="list-group-item"></li>
+                  </ul>
             </div>
+            <div th:if="${editMode}" th:include="user-form/add-address.html" th:remove="tag"></div>
         </div>
-    </div> 
-    <div th:if="${editMode}" th:include="user-form/add-address.html" th:remove="tag"></div>
+    </div>   
 </body>
-
 </html>

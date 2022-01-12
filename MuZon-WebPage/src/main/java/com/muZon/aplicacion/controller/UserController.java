@@ -2,6 +2,7 @@ package com.muZon.aplicacion.controller;
 
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -85,6 +87,7 @@ public class UserController {
 		model.addAttribute("roles", roleRepository.findAll());
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
+		
 		return "user-form/user-view";
 	}
 
@@ -94,9 +97,7 @@ public class UserController {
 
 		model.addAttribute("userAddress", user);
 		model.addAttribute("addressForm", new ChangeAddressForm(id));
-		model.addAttribute("userForm", user);
 		model.addAttribute("editMode", "true");
-		model.addAttribute("passwordForm", new ChangePasswordForm(id));
 
 		return "user-form/address-form";
 	}
@@ -225,6 +226,17 @@ public class UserController {
 		return ResponseEntity.ok("Success");
 	}
 
+	@PostMapping("/editUser/changePassword/{id}")
+	public ResponseEntity<?> postEditUseChangePassword(@Valid @RequestParam String id) {
+		try {
+			System.out.println(id);
+			//userService.changePasswordById(id, request.getParameter("newPassword"), request.getParameter("confirmPassword"));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok("Success");
+	}
+
 	@PostMapping("/editUser/addAddress")
 	public ResponseEntity<?> postAddAddress(@Valid @RequestBody ChangeAddressForm form, Errors errors) {
 		try {
@@ -240,5 +252,30 @@ public class UserController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		return ResponseEntity.ok("Success");
+	}
+
+	@GetMapping("/accountSettings/{id}")
+	public String editAccountSettings(Model model, @PathVariable(name = "id") Long id) throws Exception {
+		User userToEdit = userService.getUserById(id);
+
+		model.addAttribute("editMode", "true");
+		model.addAttribute("passwordForm", new ChangePasswordForm(userToEdit.getId()));
+
+		return "user-form/accountSettings";
+	}
+
+	@GetMapping("/sell/{id}")
+	public String sell(Model model, @PathVariable(name = "id") Long id) throws Exception {
+		Role userRole = roleRepository.findByName("USER");
+		User userToEdit = userService.getUserById(id);
+		List<Role> roles = Arrays.asList(userRole);
+
+		model.addAttribute("userId", userToEdit.getId());
+		model.addAttribute("editMode", "true");
+		//model.addAttribute("productForm", new Product());
+		model.addAttribute("roles", roles);
+		
+
+		return "user-form/sellForm";
 	}
 }
