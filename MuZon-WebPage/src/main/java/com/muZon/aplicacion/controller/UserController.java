@@ -14,6 +14,7 @@ import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
 import com.muZon.aplicacion.repository.RoleRepository;
 import com.muZon.aplicacion.service.UserService;
+import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -270,12 +271,28 @@ public class UserController {
 		User userToEdit = userService.getUserById(id);
 		List<Role> roles = Arrays.asList(userRole);
 
-		model.addAttribute("userId", userToEdit.getId());
+		model.addAttribute("userId", userToEdit);
 		model.addAttribute("editMode", "true");
-		//model.addAttribute("productForm", new Product());
+		model.addAttribute("productForm", new Product());
 		model.addAttribute("roles", roles);
 		
 
 		return "user-form/sellForm";
+	}
+
+	@PostMapping("/addProduct/{id}")
+	public String addProductToSell(@Valid @ModelAttribute("productForm") Product product, BindingResult result, Model model, @PathVariable(name = "id") Long id) throws Exception {
+		
+		User seller = userService.getUserById(id);
+		
+		try {
+			userService.addProduct(seller, product);
+		} catch (CustomeFieldValidationException cfve) {
+			result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+		} catch (Exception e) {
+			model.addAttribute("formErrorMessage", e.getMessage());
+		}
+
+		return "index";
 	}
 }

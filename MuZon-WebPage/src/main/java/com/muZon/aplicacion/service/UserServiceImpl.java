@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.User;
+import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	UserRepository repository;
+
+	@Autowired
+	ProductRepository repositoryProduct;
 
 	@Override
 	public Iterable<User> getAllUsers() {
@@ -134,4 +139,19 @@ public class UserServiceImpl implements UserService{
 		}
 		return loggedUser != null ?true :false;
 	}
+
+	@Override
+    public Product addProduct(User seller, Product product) throws Exception {
+        
+        Product newProduct = new Product();
+		newProduct.setName(product.getName());
+		newProduct.setDescription(product.getDescription());
+		newProduct.setPrice(product.getPrice());
+		newProduct.setImgSrc(product.getImgSrc());
+		newProduct.setQuantity(product.getQuantity());
+		Optional<User> sellerData = repository.findById(seller.getId());
+		newProduct.setSellerId(sellerData.get());
+
+		return repositoryProduct.save(newProduct);
+    }
 }
