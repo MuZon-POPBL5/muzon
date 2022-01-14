@@ -4,14 +4,18 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import java.util.Date;
 import java.util.Arrays;
+
 import java.util.List;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
 import com.muZon.aplicacion.entity.User;
+import com.muZon.aplicacion.entity.GrafanaMetrics;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
 import com.muZon.aplicacion.repository.RoleRepository;
+import com.muZon.aplicacion.service.GrafanaService;
 import com.muZon.aplicacion.service.UserService;
 import com.muZon.aplicacion.entity.Role;
 
@@ -33,6 +37,10 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	GrafanaService grafanaService;
+
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -77,9 +85,15 @@ public class UserController {
 
 		return index();
 	}
-
+	
 	@GetMapping("/userForm")
-	public String userForm(Model model) {
+	public String userForm(Model model) throws Exception {
+		// parte de grafana, meter los datos a la base de datos
+		GrafanaMetrics metricsGraf= new GrafanaMetrics();
+		Date today = new Date();
+		metricsGraf.setSqlTimestamp(today);
+		grafanaService.saveGrafanaMetrics(metricsGraf);
+		//------------------
 		model.addAttribute("userForm", new User());
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
@@ -127,6 +141,7 @@ public class UserController {
 
 	@PostMapping("/userForm")
 	public String createUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
+	
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", user);
 			model.addAttribute("formTab", "active");
@@ -199,7 +214,7 @@ public class UserController {
 	}
 
 	@GetMapping("/deleteUser/{id}")
-	public String deleteUser(Model model, @PathVariable(name = "id") Long id) {
+	public String deleteUser(Model model, @PathVariable(name = "id") Long id) throws Exception{
 		try {
 			userService.deleteUser(id);
 		} catch (Exception e) {
