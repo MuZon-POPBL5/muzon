@@ -1,0 +1,5 @@
+https://github.com/grafana/grafana/issues/710
+https://github.com/grafana/grafana/blob/9486f960d175b5c13fe55afa89829fe71188da8b/docs/sources/administration/configuration.md
+
+quitar las comillas delante de min_interval para que se pueda ejecutar.
+Cambiar los 5s a 1s y para delante

@@ -47,6 +47,7 @@ public class UserController {
 
 	@GetMapping({ "/", "/login" })
 	public String index() {
+		
 		return "index";
 	}
 
@@ -92,6 +93,8 @@ public class UserController {
 		GrafanaMetrics metricsGraf= new GrafanaMetrics();
 		Date today = new Date();
 		metricsGraf.setSqlTimestamp(today);
+		Integer numLogs = metricsGraf.getNumLogins();
+		metricsGraf.setNumLogins(++numLogs);
 		grafanaService.saveGrafanaMetrics(metricsGraf);
 		//------------------
 		model.addAttribute("userForm", new User());

@@ -1,5 +1,14 @@
 package com.muZon.aplicacion;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.muZon.aplicacion.entity.GrafanaMetrics;
+import com.muZon.aplicacion.service.GrafanaService;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,15 +16,21 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig  extends  WebSecurityConfigurerAdapter{
 
-	String[] resources = new String[]{
+
+    @Autowired
+	GrafanaService grafanaService;
+
+    String[] resources = new String[]{
             "/include/**","/css/**","/icons/**","/img/**","/js/**","/layer/**"
     };
 	
@@ -36,8 +51,24 @@ public class WebSecurityConfig  extends  WebSecurityConfigurerAdapter{
             .passwordParameter("password")
             .and()
             .csrf().disable()
-        .logout()
-            .permitAll()
+        .logout().addLogoutHandler(new LogoutHandler() {
+
+            @Override
+            public void logout(HttpServletRequest arg0, HttpServletResponse arg1, Authentication arg2) {
+                System.out.println("-------------He salido ------------------");
+                GrafanaMetrics metricsGraf= new GrafanaMetrics();
+                Date today = new Date();
+                Integer numLogs = metricsGraf.getNumLogins();
+		        metricsGraf.setNumLogins(numLogs);
+                metricsGraf.setSqlTimestamp(today);
+                try {
+                    grafanaService.saveGrafanaMetrics(metricsGraf);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            })
+            .permitAll() 
             .logoutSuccessUrl("/login?logout");
     }
 	

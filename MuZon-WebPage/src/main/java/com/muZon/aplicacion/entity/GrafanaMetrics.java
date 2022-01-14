@@ -2,12 +2,8 @@ package com.muZon.aplicacion.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
-import javax.persistence.AttributeConverter;
 import javax.persistence.Column;
-import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+
 
 @Entity
 public class GrafanaMetrics implements Serializable {
@@ -27,7 +23,10 @@ public class GrafanaMetrics implements Serializable {
     private Integer id;
 
     @Temporal(TemporalType.TIMESTAMP)
-	private Date click_date;
+    private Date click_date;
+
+    @Column
+    private Integer  num_logins=0;
 
     public Date getSqlTimeStamp(Date click_date) {
         return click_date;
@@ -36,7 +35,15 @@ public class GrafanaMetrics implements Serializable {
     public void setSqlTimestamp(Date click_date) {
         this.click_date = click_date;
     }
-    
+
+    public Integer getNumLogins() {
+        return num_logins;
+    }
+
+    public void setNumLogins(Integer num_logins) {
+        this.num_logins = num_logins;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -51,6 +58,7 @@ public class GrafanaMetrics implements Serializable {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((click_date == null) ? 0 : click_date.hashCode());
+        result = prime * result + ((num_logins == null) ? 0 : num_logins.hashCode());
         return result;
     }
 
@@ -73,19 +81,17 @@ public class GrafanaMetrics implements Serializable {
                 return false;
         } else if (!click_date.equals(other.click_date))
             return false;
+        if (num_logins == null) {
+            if (other.num_logins != null)
+                return false;
+        } else if (!num_logins.equals(other.num_logins))
+            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "grafana_metrics [id=" + id + ", click_date" + click_date + "]";
+        return "grafana_metrics [id=" + id + ", click_date" + click_date + ", num_logins" + num_logins + "]";
     }
-
-
- 
-
-
-   
-
 
 }
