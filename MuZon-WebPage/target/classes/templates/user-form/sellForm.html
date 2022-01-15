@@ -37,7 +37,7 @@
 							<div class="form-group">
 								<div class="form-floating mb-1">
 									<input class="form-control" id="floatingInput" type="text"
-										th:field="${productForm.name}" th:disabled="${disableFields}">
+										th:field="${productForm.name}" th:disabled="${disableFields}" required>
 									<label for="floatingInput"><b>Product Name</b></label>
 									<div class="alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
 										Name
@@ -51,7 +51,7 @@
 								<div class="col-5 d-flex">
 									<div class="form-floating mb-1 h-100 w-100">
 										<input class="form-control h-100" id="floatingInput" type="text"
-											th:field="${productForm.description}" th:disabled="${disableFields}">
+											th:field="${productForm.description}" th:disabled="${disableFields}" required>
 										<label for="floatingInput"><em>Description</em></label>
 										<div class="alert-danger" th:if="${#fields.hasErrors('description')}"
 											th:errors="*{description}">Name Error
@@ -65,7 +65,7 @@
 
 									<div class="form-floating mb-1">
 										<input class="form-control" id="floatingInput" type="text"
-											th:field="${productForm.price}" th:disabled="${disableFields}">
+											th:field="${productForm.price}" th:disabled="${disableFields}" required>
 										<label for="floatingInput">Price</label>
 										<div class="alert-danger" th:if="${#fields.hasErrors('price')}"
 											th:errors="*{price}">Name
@@ -79,7 +79,7 @@
 							<div class="col-4 form-group">
 								<div class="form-floating mb-1">
 									<input class="form-control" id="floatingInput" type="text"
-										th:field="${productForm.quantity}" th:disabled="${disableFields}">
+										th:field="${productForm.quantity}" th:disabled="${disableFields}" required>
 									<label for="floatingInput">Quantity</label>
 									<div class="alert-danger" th:if="${#fields.hasErrors('quantity')}"
 										th:errors="*{quantity}">Name
@@ -94,7 +94,7 @@
 					</form>
 					<form id="fileForm" enctype="multipart/form-data">
 						<input type="file" name="file" id="file" /><br /><br />
-						<input type="button" id="submit" value="Submit" onclick="postComment()" />
+						<input type="button" id="submit" value="Upload" onclick="postComment()" />
 					</form>
 				</div>
 			</div>
@@ -109,7 +109,11 @@
 			type: 'POST',
 			data: new FormData($('#fileForm')[0]),
 			processData: false,
-			contentType: false
+			contentType: false,
+			success: function (data, textStatus) {
+				//redirect when succeed
+				$("#fileForm").replaceWith(textStatus)
+			}
 		});
 		e.preventDefault();
 	}

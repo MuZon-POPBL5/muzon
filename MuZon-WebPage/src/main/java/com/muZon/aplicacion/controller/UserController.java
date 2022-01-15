@@ -312,8 +312,6 @@ public class UserController {
            /* Path path = Paths.get(file.getOriginalFilename());
             Files.write(path, bytes);*/
 
-			System.out.println(bytes);
-
 			userService.save(bytes);
 
         } catch (IOException e) {
