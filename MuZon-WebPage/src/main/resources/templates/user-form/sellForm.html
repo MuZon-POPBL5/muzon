@@ -6,6 +6,8 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
@@ -58,13 +60,7 @@
 								</div>
 								<div class="col-7">
 									<div class="form-floating mb-3">
-										<div class="file-loading">
-											<input id="input-res-1" name="input-res-1[]" type="file" th:field="${productForm.imgSrc}" 
-											th:disabled="${disableFields}" multiple>
-										</div>
-										<div class="alert-danger" th:if="${#fields.hasErrors('imgSrc')}"
-											th:errors="*{imgSrc}">Name
-											Error</div>
+
 									</div>
 
 									<div class="form-floating mb-1">
@@ -96,6 +92,10 @@
 							</div>
 						</div>
 					</form>
+					<form id="fileForm" enctype="multipart/form-data">
+						<input type="file" name="file" id="file" /><br /><br />
+						<input type="button" id="submit" value="Submit" onclick="postComment()" />
+					</form>
 				</div>
 			</div>
 		</div>
@@ -103,23 +103,16 @@
 </body>
 
 <script>
-	$(document).ready(function () {
-		$("#input-res-1").fileinput({
-			uploadUrl: "/site/test-upload",
-			enableResumableUpload: true,
-			initialPreviewAsData: true,
-			maxFileCount: 5,
-			theme: 'fas',
-			deleteUrl: '/site/file-delete',
-			fileActionSettings: {
-				showZoom: function (config) {
-					if (config.type === 'pdf' || config.type === 'image') {
-						return true;
-					}
-					return false;
-				}
-			}
+	function postComment() {
+		$.ajax({
+			url: '/upload',
+			type: 'POST',
+			data: new FormData($('#fileForm')[0]),
+			processData: false,
+			contentType: false
 		});
-	});
+		e.preventDefault();
+	}
 </script>
+
 </html>

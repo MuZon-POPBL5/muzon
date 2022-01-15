@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -32,8 +33,9 @@ public class Product implements Serializable {
     @Column
     private String description;
 
+    @Lob
     @Column
-    private String imgSrc;
+    private byte[] imgSrc;
 
     @Column
     private float price;
@@ -61,11 +63,11 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public String getImgSrc() {
+    public byte[] getImgSrc() {
         return imgSrc;
     }
 
-    public void setImgSrc(String imgSrc) {
+    public void setImgSrc(byte[] imgSrc) {
         this.imgSrc = imgSrc;
     }
 

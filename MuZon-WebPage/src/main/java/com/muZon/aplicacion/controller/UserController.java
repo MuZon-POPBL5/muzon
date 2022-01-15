@@ -1,21 +1,22 @@
 package com.muZon.aplicacion.controller;
 
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Product;
+import com.muZon.aplicacion.entity.Role;
 import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
 import com.muZon.aplicacion.repository.RoleRepository;
 import com.muZon.aplicacion.service.UserService;
-import com.muZon.aplicacion.entity.Product;
-import com.muZon.aplicacion.entity.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 public class UserController {
@@ -282,7 +290,7 @@ public class UserController {
 
 	@PostMapping("/addProduct/{id}")
 	public String addProductToSell(@Valid @ModelAttribute("productForm") Product product, BindingResult result, Model model, @PathVariable(name = "id") Long id) throws Exception {
-		
+
 		User seller = userService.getUserById(id);
 		
 		try {
@@ -295,4 +303,23 @@ public class UserController {
 
 		return "index";
 	}
-}
+
+	@PostMapping("/upload") 
+    public ResponseEntity<?> singleFileUpload(@RequestParam() MultipartFile file,
+                                   RedirectAttributes redirectAttributes) {
+     	try {
+            byte[] bytes = file.getBytes();
+           /* Path path = Paths.get(file.getOriginalFilename());
+            Files.write(path, bytes);*/
+
+			System.out.println(bytes);
+
+			userService.save(bytes);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		return ResponseEntity.ok("Success");
+    }
+}	

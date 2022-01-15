@@ -27,4 +27,6 @@ public interface UserService {
 	public User changeAddress(ChangeAddressForm form) throws Exception;
 
 	public Product addProduct(User seller, Product product) throws Exception;
+
+	public void save(byte[] bytes);
 }

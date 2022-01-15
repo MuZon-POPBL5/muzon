@@ -1,6 +1,13 @@
 package com.muZon.aplicacion.service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
@@ -17,7 +24,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
+	byte[] imgSrc;
 
 	@Autowired
 	UserRepository repository;
@@ -29,7 +38,7 @@ public class UserServiceImpl implements UserService{
 	public Iterable<User> getAllUsers() {
 		return repository.findAll();
 	}
-	
+
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -40,7 +49,6 @@ public class UserServiceImpl implements UserService{
 		}
 		return true;
 	}
-
 
 	@Override
 	public User createUser(User user) throws Exception {
@@ -62,13 +70,14 @@ public class UserServiceImpl implements UserService{
 		mapUser(fromUser, toUser);
 		return repository.save(toUser);
 	}
-	
+
 	/**
 	 * Map everythin but the password.
+	 * 
 	 * @param from
 	 * @param to
 	 */
-	protected void mapUser(User from,User to) {
+	protected void mapUser(User from, User to) {
 		to.setUsername(from.getUsername());
 		to.setFirstName(from.getFirstName());
 		to.setEmail(from.getEmail());
@@ -85,17 +94,17 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User changePassword(ChangePasswordForm form) throws Exception {
 		User user = getUserById(form.getId());
-		
+
 		if (!isLoggedUserADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
-			throw new Exception ("Current Password invalido.");
+			throw new Exception("Current Password invalido.");
 		}
-		
-		if( user.getPassword().equals(form.getNewPassword())) {
-			throw new Exception ("Nuevo debe ser diferente al password actual.");
+
+		if (user.getPassword().equals(form.getNewPassword())) {
+			throw new Exception("Nuevo debe ser diferente al password actual.");
 		}
-		
-		if( !form.getNewPassword().equals(form.getConfirmPassword())) {
-			throw new Exception ("Nuevo Password y Current Password no coinciden.");
+
+		if (!form.getNewPassword().equals(form.getConfirmPassword())) {
+			throw new Exception("Nuevo Password y Current Password no coinciden.");
 		}
 		String encodedPassword = bCryptPasswordEncoder.encode(form.getNewPassword());
 		user.setPassword(encodedPassword);
@@ -105,13 +114,13 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User changePasswordById(Long id, String newPassword, String confirmPassowrd) throws Exception {
 		User user = getUserById(id);
-		
-		if( user.getPassword().equals(newPassword)) {
-			throw new Exception ("Nuevo debe ser diferente al password actual.");
+
+		if (user.getPassword().equals(newPassword)) {
+			throw new Exception("Nuevo debe ser diferente al password actual.");
 		}
-		
-		if( !newPassword.equals(confirmPassowrd)) {
-			throw new Exception ("Nuevo Password y Current Password no coinciden.");
+
+		if (!newPassword.equals(confirmPassowrd)) {
+			throw new Exception("Nuevo Password y Current Password no coinciden.");
 		}
 		String encodedPassword = bCryptPasswordEncoder.encode(confirmPassowrd);
 		user.setPassword(encodedPassword);
@@ -121,9 +130,10 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User changeAddress(ChangeAddressForm form) throws Exception {
 		User user = getUserById(form.getId());
-		
+
 		user.setAddress(form.getNewAddress());
-		//user.setAddress("c " + form.getNewAddress() + form.getNewCity() + ", " + form.getNewZipCode() + ", " + form.getNewCountry());
+		// user.setAddress("c " + form.getNewAddress() + form.getNewCity() + ", " +
+		// form.getNewZipCode() + ", " + form.getNewCountry());
 		return repository.save(user);
 	}
 
@@ -134,24 +144,29 @@ public class UserServiceImpl implements UserService{
 			loggedUser = (UserDetails) principal;
 
 			loggedUser.getAuthorities().stream()
-					.filter(x -> "ADMIN".equals(x.getAuthority() ))      
-					.findFirst().orElse(null); //loggedUser = null;
+					.filter(x -> "ADMIN".equals(x.getAuthority()))
+					.findFirst().orElse(null); // loggedUser = null;
 		}
-		return loggedUser != null ?true :false;
+		return loggedUser != null ? true : false;
 	}
 
 	@Override
-    public Product addProduct(User seller, Product product) throws Exception {
-        
-        Product newProduct = new Product();
+	public Product addProduct(User seller, Product product) throws Exception {
+
+		Product newProduct = new Product();
 		newProduct.setName(product.getName());
 		newProduct.setDescription(product.getDescription());
 		newProduct.setPrice(product.getPrice());
-		newProduct.setImgSrc(product.getImgSrc());
+		newProduct.setImgSrc(this.imgSrc);
 		newProduct.setQuantity(product.getQuantity());
 		Optional<User> sellerData = repository.findById(seller.getId());
 		newProduct.setSellerId(sellerData.get());
-
+		 
 		return repositoryProduct.save(newProduct);
-    }
+	}
+
+	@Override
+	public void save(byte[] bytes) {
+		this.imgSrc = bytes;
+	}
 }
