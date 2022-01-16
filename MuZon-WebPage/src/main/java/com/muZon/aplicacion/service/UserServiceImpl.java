@@ -85,7 +85,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	public void deleteUser(Long id) throws Exception {
 		User user = getUserById(id);
 		repository.delete(user);
@@ -94,10 +93,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User changePassword(ChangePasswordForm form) throws Exception {
 		User user = getUserById(form.getId());
-
-		if (!isLoggedUserADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
-			throw new Exception("Current Password invalido.");
-		}
 
 		if (user.getPassword().equals(form.getNewPassword())) {
 			throw new Exception("Nuevo debe ser diferente al password actual.");
@@ -168,5 +163,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void save(byte[] bytes) {
 		this.imgSrc = bytes;
+	}
+
+	@Override
+	public User changeEmail(User user, String newEmail) {
+		user.setEmail(newEmail);
+
+		return repository.save(user);
 	}
 }

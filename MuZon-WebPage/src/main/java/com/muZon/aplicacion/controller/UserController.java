@@ -1,12 +1,13 @@
 package com.muZon.aplicacion.controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
@@ -15,6 +16,7 @@ import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.Role;
 import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
+import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.RoleRepository;
 import com.muZon.aplicacion.service.UserService;
 
@@ -34,11 +36,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Controller
 public class UserController {
 
@@ -47,6 +44,9 @@ public class UserController {
 
 	@Autowired
 	RoleRepository roleRepository;
+
+	@Autowired
+	ProductRepository productRepository;
 
 	@GetMapping({ "/", "/login" })
 	public String index() {
@@ -61,7 +61,7 @@ public class UserController {
 		model.addAttribute("signup", true);
 		model.addAttribute("userForm", new User());
 		model.addAttribute("roles", roles);
-		
+
 		return "user-form/user-signup";
 	}
 
@@ -77,7 +77,7 @@ public class UserController {
 		model.addAttribute("userForm", user);
 		model.addAttribute("roles", roles);
 		model.addAttribute("signup", true);
-		
+
 		try {
 			userService.createUser(user);
 		} catch (CustomeFieldValidationException cfve) {
@@ -94,9 +94,10 @@ public class UserController {
 		model.addAttribute("userForm", new User());
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
+		model.addAttribute("productList", productRepository.findAll());
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
-		
+
 		return "user-form/user-view";
 	}
 
@@ -128,11 +129,11 @@ public class UserController {
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
 		model.addAttribute("formTab", "active");
-		//model.addAttribute("editMode", "true");
-		//model.addAttribute("passwordForm", new ChangePasswordForm(id));
+		// model.addAttribute("editMode", "true");
+		// model.addAttribute("passwordForm", new ChangePasswordForm(id));
 
 		return "user-form/address-form";
-		//return "user-form/user-view";
+		// return "user-form/user-view";
 	}
 
 	@PostMapping("/userForm")
@@ -218,6 +219,16 @@ public class UserController {
 		return userForm(model);
 	}
 
+	@PostMapping("/deleteUser/{id}")
+	public String deleteUserPost(Model model, @PathVariable(name = "id") Long id) {
+		try {
+			userService.deleteUser(id);
+		} catch (Exception e) {
+			model.addAttribute("listErrorMessage", e.getMessage());
+		}
+		return "redirect:/logout";
+	}
+
 	@PostMapping("/editUser/changePassword")
 	public ResponseEntity<?> postEditUseChangePassword(@Valid @RequestBody ChangePasswordForm form, Errors errors) {
 		try {
@@ -236,14 +247,26 @@ public class UserController {
 	}
 
 	@PostMapping("/editUser/changePassword/{id}")
-	public ResponseEntity<?> postEditUseChangePassword(@Valid @RequestParam String id) {
+	public String postEditUseChangePassword(@Valid @ModelAttribute("passwordForm") ChangePasswordForm form) {
 		try {
-			System.out.println(id);
-			//userService.changePasswordById(id, request.getParameter("newPassword"), request.getParameter("confirmPassword"));
+			userService.changePassword(form);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return e.getMessage();
 		}
-		return ResponseEntity.ok("Success");
+		return "redirect:/userForm";
+	}
+
+	@PostMapping("/editUser/changeEmail/{id}")
+	public String postEditUseChangeEmail(
+			@PathVariable(name = "id") Long id, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		try {
+			userService.changeEmail(userService.getUserById(id), request.getParameter("email"));
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+		return "redirect:/userForm";
 	}
 
 	@PostMapping("/editUser/addAddress")
@@ -263,12 +286,20 @@ public class UserController {
 		return ResponseEntity.ok("Success");
 	}
 
+	@GetMapping("/displayDeleteForm/{id}")
+	public String deleteForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
+		User userToEdit = userService.getUserById(id);
+		model.addAttribute("userToDelete", userToEdit);
+		return "user-form/deleteForm";
+	}
+
 	@GetMapping("/accountSettings/{id}")
 	public String editAccountSettings(Model model, @PathVariable(name = "id") Long id) throws Exception {
 		User userToEdit = userService.getUserById(id);
 
+		model.addAttribute("user", userToEdit);
 		model.addAttribute("editMode", "true");
-		model.addAttribute("passwordForm", new ChangePasswordForm(userToEdit.getId()));
+		model.addAttribute("passwordForm", new ChangePasswordForm(id));
 
 		return "user-form/accountSettings";
 	}
@@ -283,16 +314,16 @@ public class UserController {
 		model.addAttribute("editMode", "true");
 		model.addAttribute("productForm", new Product());
 		model.addAttribute("roles", roles);
-		
 
 		return "user-form/sellForm";
 	}
 
 	@PostMapping("/addProduct/{id}")
-	public String addProductToSell(@Valid @ModelAttribute("productForm") Product product, BindingResult result, Model model, @PathVariable(name = "id") Long id) throws Exception {
+	public String addProductToSell(@Valid @ModelAttribute("productForm") Product product, BindingResult result,
+			Model model, @PathVariable(name = "id") Long id) throws Exception {
 
 		User seller = userService.getUserById(id);
-		
+
 		try {
 			userService.addProduct(seller, product);
 		} catch (CustomeFieldValidationException cfve) {
@@ -304,20 +335,22 @@ public class UserController {
 		return "index";
 	}
 
-	@PostMapping("/upload") 
-    public ResponseEntity<?> singleFileUpload(@RequestParam() MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-     	try {
-            byte[] bytes = file.getBytes();
-           /* Path path = Paths.get(file.getOriginalFilename());
-            Files.write(path, bytes);*/
+	@PostMapping("/upload")
+	public ResponseEntity<?> singleFileUpload(@RequestParam() MultipartFile file,
+			RedirectAttributes redirectAttributes) {
+		try {
+			byte[] bytes = file.getBytes();
+			/*
+			 * Path path = Paths.get(file.getOriginalFilename());
+			 * Files.write(path, bytes);
+			 */
 
 			userService.save(bytes);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.ok("Success");
-    }
-}	
+	}
+}

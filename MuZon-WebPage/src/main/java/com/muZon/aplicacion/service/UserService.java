@@ -29,4 +29,6 @@ public interface UserService {
 	public Product addProduct(User seller, Product product) throws Exception;
 
 	public void save(byte[] bytes);
+
+	public User changeEmail(User user, String newEmail);
 }

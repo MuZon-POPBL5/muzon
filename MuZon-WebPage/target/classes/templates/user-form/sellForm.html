@@ -20,14 +20,12 @@
 
 
 	<script src="lib/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
 
 </head>
 
 <body>
 	<div th:with="disableFields=!${editMode} and ${#authorization.expression('hasRole(''ROLE_USER'')')}">
-		<div class="container pt-2 px-1 mx-3">
-			<a class="btn btn-secondary" th:href="@{'/addressForm/cancel'}">Back</a>
-		</div>
 		<div class="container px-5">
 			<div id="myTab" role="tablist">
 				<div class="d-flex justify-content-center container">
