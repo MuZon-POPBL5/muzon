@@ -1,0 +1,17 @@
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\controller\UserController.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\util\PassGenerator.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\dto\ChangeAddressForm.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\AplicaionApplication.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\service\UserDetailsServiceImpl.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\exception\CustomeFieldValidationException.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\dto\ChangePasswordForm.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\repository\ProductRepository.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\repository\UserRepository.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\entity\Role.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\repository\RoleRepository.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\entity\Product.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\MethodSecurityConfig.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\service\UserServiceImpl.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\WebSecurityConfig.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\service\UserService.java
+C:\Users\danel\OneDrive\Escritorio\Backend(orunaTests)\muzon\MuZon-WebPage\src\main\java\com\muZon\aplicacion\entity\User.java

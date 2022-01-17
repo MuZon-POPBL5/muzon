@@ -1,0 +1,6 @@
+projectKey=WebBackEnd
+serverUrl=http://localhost:9000
+serverVersion=9.1.0.47736
+dashboardUrl=http://localhost:9000/dashboard?id=WebBackEnd
+ceTaskId=AX5nr9Uj8WAlKfVo85c2
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AX5nr9Uj8WAlKfVo85c2

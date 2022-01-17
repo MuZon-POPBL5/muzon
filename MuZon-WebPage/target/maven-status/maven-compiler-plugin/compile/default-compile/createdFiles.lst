@@ -1,0 +1,17 @@
+com\muZon\aplicacion\repository\UserRepository.class
+com\muZon\aplicacion\WebSecurityConfig.class
+com\muZon\aplicacion\controller\UserController.class
+com\muZon\aplicacion\service\UserDetailsServiceImpl.class
+com\muZon\aplicacion\repository\ProductRepository.class
+com\muZon\aplicacion\entity\Product.class
+com\muZon\aplicacion\exception\CustomeFieldValidationException.class
+com\muZon\aplicacion\AplicaionApplication.class
+com\muZon\aplicacion\MethodSecurityConfig.class
+com\muZon\aplicacion\service\UserServiceImpl.class
+com\muZon\aplicacion\dto\ChangePasswordForm.class
+com\muZon\aplicacion\entity\Role.class
+com\muZon\aplicacion\entity\User.class
+com\muZon\aplicacion\dto\ChangeAddressForm.class
+com\muZon\aplicacion\service\UserService.class
+com\muZon\aplicacion\repository\RoleRepository.class
+com\muZon\aplicacion\util\PassGenerator.class
