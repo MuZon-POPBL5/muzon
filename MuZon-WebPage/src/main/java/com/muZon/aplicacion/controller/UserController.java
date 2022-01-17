@@ -332,7 +332,7 @@ public class UserController {
 			model.addAttribute("formErrorMessage", e.getMessage());
 		}
 
-		return "index";
+		return "redirect:/userForm";
 	}
 
 	@PostMapping("/upload")
