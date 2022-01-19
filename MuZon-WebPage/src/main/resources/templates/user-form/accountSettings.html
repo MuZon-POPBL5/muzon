@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>User Information and Form</title>
+
+    <!--JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <!-- Los iconos tipo Solid de Fontawesome-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+    <script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+    <!-- Nuestro css-->
+    <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
+
+    <!-- DATA TABLE -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+            $('#userList').DataTable();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container pt-2 px-1 mx-3">
+        <a class="btn btn-secondary" th:href="@{'/addressForm/cancel'}">Back</a>
+    </div>
+    <div class="container px-5 pt-0 mt-0">
+        <div id="myTab" role="tablist">
+            <div class="container-fluid">
+                <div class="card card-outline-secondary mb-4">
+                    <div class="card-header">
+                        <h3 class="mb-0">Change Password</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form" role="form" autocomplete="off" th:object="${passwordForm}"
+                            method="post">
+                            <div class="form-group">
+                                <label for="inputPasswordNew">New Password</label>
+                                <input type="password" class="form-control" id="inputPasswordNew"
+                                    th:field="${passwordForm.newPassword}" required="">
+                                <span class="form-text small text-muted">
+                                    The password must <b><em>not</em></b> contain spaces.
+                                </span>
+                                <div class="alert-danger" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}">Password</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPasswordNewVerify">Verify</label>
+                                <input type="password" class="form-control" id="inputPasswordNewVerify"
+                                    th:field="${passwordForm.confirmPassword}" required="">
+                                <span class="form-text small text-muted">
+                                    To confirm, type the <b>new</b> password again.
+                                </span>
+                                <div class="alert-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Password</div>
+                            </div>
+                        </form>
+                            <div class="form-group">
+                                <button type="submit" onClick="submitChangePassword()"
+                                    class="btn btn-success btn-lg float-right">Save</button>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="card card-outline-secondary mb-4">
+                    <div class="card-header">
+                        <h3 class="mb-0">Change Email</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form" role="form" autocomplete="off">
+                            <div class="form-group">
+                                <label for="inputResetPasswordEmail">New Email</label>
+                                <input type="email" class="form-control" id="inputResetPasswordEmail" required="">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-lg float-right">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    function submitChangePassword() {
+        var params = {};
+        console.log("---------------------------------------------------")
+        params["id"] = $("#id").val();
+        params["newPassword"] = $("#newPassword").val();
+        params["confirmPassword"] = $("#confirmPassword").val();
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/editUser/changePassword",
+            data: JSON.stringify(params),
+            dataType: 'text',
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                $("#changePasswordForm")[0].reset();
+
+                $("#changePasswordError").addClass("d-none");
+                $("#formSuccess").removeClass("d-none");
+                $("#formSuccess").html("Password Actualizado exitosmante!.");
+
+                $('#changePasswordModal').modal('toggle');
+                setTimeout(function () { $("#formSuccess").hide('slow'); }, 2000);
+            },
+            error: function (e) {
+                $("#changePasswordError").removeClass("d-none");
+                $("#formSuccess").addClass("d-none");
+                $("#changePasswordError").html(e.responseText);
+            }
+        });
+
+    }
+</script>
+
+</html>

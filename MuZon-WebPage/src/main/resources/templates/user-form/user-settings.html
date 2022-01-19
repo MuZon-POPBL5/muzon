@@ -1,0 +1,16 @@
+<div class="table-responsive">
+	<table id="userList" class="table table-bordered table-hover table-striped">
+		<tbody>
+			<tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+				<span
+					th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
+						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4" href="#" th:href="@{'/accountSettings/'+ ${user.id}}">Mi Cuenta</a>
+						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark" href="#" th:href="@{'/selectAddress/'+ ${user.id}}">Choose your address</a>
+						<a class="container btn btn-outline-primary btn-dark-teal text-decoration-none text-dark" href="#" th:href="@{'/deleteUser/'+ ${user.id}}">Delete Account</a>
+				</span>
+			</tr>
+		</tbody>
+	</table>
+	<div class="alert alert-danger text-center" th:if="${listErrorMessage}" th:text="${listErrorMessage}">Error MEssage
+	</div>
+</div>
