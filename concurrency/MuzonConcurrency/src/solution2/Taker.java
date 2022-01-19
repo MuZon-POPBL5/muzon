@@ -1,13 +1,21 @@
-package soultion2;
+package solution2;
 
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
-
+/**
+ * @file Taker.java
+ * @brief This class creates a Thread to simulate a take request for the robot. 
+ * @author Ander Palacios APalacios
+ * @version v2.0.0
+ * @date 18/01/2022
+*/
 public class Taker extends Thread {
 	long id;
 	final int MAXTIMES = 2;
 	Buffer buffer;
+	Random generador;
 	ItemDeposit account;
 	Semaphore fullBuffer, emptyBuffer;
 	
@@ -18,9 +26,13 @@ public class Taker extends Thread {
 		this.fullBuffer = fullBuffer;
 		this.emptyBuffer = emptyBuffer;
 	}
-
+	/**
+	 * @brief The thread assigns a take order to the robot
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	*/
 	public  void run(){
-		Random generador = new Random();
+		generador = new SecureRandom();
 			try {
 				emptyBuffer.acquire();
 				buffer.put(new Runnable () {
@@ -32,7 +44,7 @@ public class Taker extends Thread {
 					}
 				});
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
 			
 		

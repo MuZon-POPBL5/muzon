@@ -1,10 +1,16 @@
-package soultion2;
+package solution2;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-
+/**
+ * @file Main.java
+ * @brief This class simulates the robot behavior on a shelf. 
+ * @author Ander Palacios APalacios
+ * @version v2.0.0
+ * @date 18/01/2022
+*/
 public class Main {
 	
 	
@@ -27,6 +33,12 @@ public class Main {
 		emptyBuffer = new Semaphore(ROBOTCAPACITY);
 		
 	}
+	/**
+	 * @brief create the threads
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	 * @return void
+	*/
 	public void createThreads(){
 		for(int d= 0; d < NUMSHELVES; d++){
 			buffer = new Buffer(ACTIONSCAPACITY);
@@ -38,6 +50,12 @@ public class Main {
 		}
 		
 	}
+	/**
+	 * @brief start the threads
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	 * @return void
+	*/
 	public void startThreads(){
 		for(Robot executor : executorList) {
 			for (int i= 0; i<MAXTHREADS; i++){
@@ -46,11 +64,16 @@ public class Main {
 				saverList[i]= new Taker(executor.getId(), items,buffer, fullBuffer, emptyBuffer);
 				saverList[i].start();
 			}
-			System.out.println("pedidos asignados a robot " + executor.getId());
 			executor.start();
 		}
 		
 	}
+	/**
+	 * @brief wait until threads have finished
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	 * @return void
+	*/
 	public void waitEndOfThreads() throws InterruptedException{
 		for(Robot executor : executorList) {
 			for (int i= 0; i<MAXTHREADS; i++){
@@ -66,6 +89,12 @@ public class Main {
 			executor.join();
 		}
 	}
+	/**
+	 * @brief executes the simulation
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	 * @return void
+	*/
 	public static void main(String[] args) throws InterruptedException {
 		long start = System.currentTimeMillis();
 		Main exercise = new Main();

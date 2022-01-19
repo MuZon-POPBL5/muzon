@@ -2,6 +2,13 @@ package solution3;
 
 import java.util.concurrent.Semaphore;
 
+/**
+ * @file Lefter.java
+ * @brief This class creates a Thread to simulate a left request for the robot. 
+ * @author Ander Palacios APalacios
+ * @version v3.0.0
+ * @date 18/01/2022
+*/
 public class Lefter extends Thread {
 	long id;
 	boolean done;
@@ -18,6 +25,11 @@ public class Lefter extends Thread {
 		
 	}
 
+	/**
+	 * @brief The thread assigns a left order to the robot
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	*/
 	public void run(){
 		done = false;
 			try {
@@ -31,7 +43,7 @@ public class Lefter extends Thread {
 				}
 			
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
 		
 	}

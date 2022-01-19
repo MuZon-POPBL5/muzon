@@ -1,13 +1,20 @@
 package solution3;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
-
+/**
+ * @file Coordinator.java
+ * @brief This class creates a coordinator robot that assigns orders to other robots. 
+ * @author Ander Palacios APalacios
+ * @version v1.0.0
+ * @date 18/01/2022
+*/
 public class Coordinator {
 	
-	final int MAXTHREADS = 100;
+	final int MAXTHREADS = 400;
 	//int actionsCapacity;
 	int robotCapacity;
 	int numShelves;
@@ -17,6 +24,7 @@ public class Coordinator {
 	Semaphore mutexBuffer;
 	Semaphore mutex;
 	Semaphore mutexBufferList[];
+	Random generador;
 
 	public Coordinator(List<Robot> robots, int robotCapacity, int numShelves) {
 		this.robotCapacity = robotCapacity;
@@ -34,21 +42,15 @@ public class Coordinator {
 		
 	}
 
+
+	/**
+	 * @brief Using this the coordinator generates tasks and assign them randomly to a robot.
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	 * @return void
+	*/	
 	public void coordinate() {
-		for(Robot executor : robots) {
-//			for (int i= 0; i<MAXTHREADS; i++){
-//				spenderList[i]= new Lefter(executor.getId(), executor.getItems(), executor.getBuffer(), fullBuffer, emptyBuffer);
-//				spenderList[i].start();
-//				saverList[i]= new Taker(executor.getId(), executor.getItems(), executor.getBuffer(), fullBuffer, emptyBuffer);
-//				saverList[i].start();
-//			}
-			System.out.println("pedidos asignados a robot " + executor.getId());
-			executor.start();
-		}
-	}
-	
-	public void coordinate2() {
-		Random generador = new Random();
+		generador = new SecureRandom();
 		int robotId;
 		boolean first;
 		Robot robot = null;
@@ -64,8 +66,7 @@ public class Coordinator {
 			try {
 				mutex.acquire();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
 			if(robot.getNumActions() == 0) {
 				first = true;
@@ -102,7 +103,12 @@ public class Coordinator {
 		}
 	}
 	
-
+	/**
+	 * @brief the coordinator waits until every robot has finished their tasks
+	 * @author Ander Palacios APalacios
+	 * @date 18/1/2022
+	 * @return void
+	*/	
 	public void waitToFinish() throws InterruptedException {
 		
 		
