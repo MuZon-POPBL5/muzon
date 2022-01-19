@@ -1,16 +1,78 @@
-<div class="table-responsive">
-	<table id="userList" class="table table-bordered table-hover table-striped">
-		<tbody>
-			<tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
-				<span
-					th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
-						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4" href="#" th:href="@{'/accountSettings/'+ ${user.id}}">Mi Cuenta</a>
-						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark" href="#" th:href="@{'/selectAddress/'+ ${user.id}}">Choose your address</a>
-						<a class="container btn btn-outline-primary btn-dark-teal text-decoration-none text-dark" href="#" th:href="@{'/deleteUser/'+ ${user.id}}">Delete Account</a>
-				</span>
-			</tr>
-		</tbody>
-	</table>
-	<div class="alert alert-danger text-center" th:if="${listErrorMessage}" th:text="${listErrorMessage}">Error MEssage
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="static/css/modalPassword.css" th:href="@{/css/modalPassword.css}">
+</head>
+
+<body>
+	<div class="table-responsive">
+		<table id="userList" class="table table-bordered table-hover table-striped">
+			<tbody>
+				<tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+					<span
+						th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
+						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4" href="#"
+							th:href="@{'/accountSettings/'+ ${user.id}}">Mi Cuenta</a>
+						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark"
+							href="#" th:href="@{'/selectAddress/'+ ${user.id}}">Choose your address</a>
+						<button id="myBtn" onclick="displayModal()"
+							class="container btn btn-outline-primary btn-dark-teal text-decoration-none text-dark">Open
+							Modal</button>
+						<div id="myModal" class="modal">
+							<div class="modal-content">
+								<span class="close">&times;</span>
+								<p class="mt-1">Protecting your privacy and the security of your data has always been a
+									priority for <em>Muzon.</em><b> If you delete your account, your profile will be
+										permanently deleted and there would not be any option to restore the
+										account.</b></p>
+								<form class="form container-fluid mx-3 px-3 py-3" role="form" autocomplete="off"
+									th:action="@{'/deleteUser/'+ ${user.id}}" method="post">
+									<button type="submit" class="btn btn-warning">Confirm Account Closure</button>
+								</form>
+							</div>
+						</div>
+					</span>
+				</tr>
+			</tbody>
+		</table>
+		<div class="alert alert-danger text-center" th:if="${listErrorMessage}" th:text="${listErrorMessage}">Error
+			MEssage
+		</div>
 	</div>
-</div>
+
+	<script>
+		// Get the modal
+		var modal = document.getElementById("myModal");
+
+		// Get the button that opens the modal
+		var btn = document.getElementById("myBtn");
+
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+
+
+		// When the user clicks the button, open the modal 
+		function displayModal() {
+			modal.style.display = "block";
+		}
+
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function () {
+			modal.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+	</script>
+
+</body>
+
+</html>

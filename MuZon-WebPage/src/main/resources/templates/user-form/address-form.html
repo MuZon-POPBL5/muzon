@@ -39,10 +39,7 @@
     <div class="container px-5">
         <div id="myTab" role="tablist">
             <div class="container-fluid row pt-2">
-                <div class="col-1">
-                    <a class="btn btn-secondary" th:href="@{'/addressForm/cancel'}">Back</a>
-                </div>
-                <div class="col-11 text-center">
+                <div class="col-12 text-center">
                     <button type="button" class="btn btn-secondary" data-toggle="modal" th:if="${editMode}"
                         data-target="#addAddressModal">New Address</button>
                 </div>

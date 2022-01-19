@@ -6,7 +6,7 @@
 
     <!--JQUERY-->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -36,9 +36,6 @@
 </head>
 
 <body>
-    <div class="container pt-2 px-1 mx-3">
-        <a class="btn btn-secondary" th:href="@{'/addressForm/cancel'}">Back</a>
-    </div>
     <div class="container px-5 pt-0 mt-0">
         <div id="myTab" role="tablist">
             <div class="container-fluid">
@@ -48,7 +45,7 @@
                     </div>
                     <div class="card-body">
                         <form class="form" role="form" autocomplete="off" th:object="${passwordForm}"
-                            method="post">
+                            th:action="@{'/editUser/changePassword/'+ ${user.id}}" method="post">
                             <div class="form-group">
                                 <label for="inputPasswordNew">New Password</label>
                                 <input type="password" class="form-control" id="inputPasswordNew"
@@ -56,7 +53,8 @@
                                 <span class="form-text small text-muted">
                                     The password must <b><em>not</em></b> contain spaces.
                                 </span>
-                                <div class="alert-danger" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}">Password</div>
+                                <div class="alert-danger" th:if="${#fields.hasErrors('newPassword')}"
+                                    th:errors="*{newPassword}">Password</div>
                             </div>
                             <div class="form-group">
                                 <label for="inputPasswordNewVerify">Verify</label>
@@ -65,13 +63,13 @@
                                 <span class="form-text small text-muted">
                                     To confirm, type the <b>new</b> password again.
                                 </span>
-                                <div class="alert-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Password</div>
+                                <div class="alert-danger" th:if="${#fields.hasErrors('confirmPassword')}"
+                                    th:errors="*{confirmPassword}">Password</div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-lg float-right">Save</button>
                             </div>
                         </form>
-                            <div class="form-group">
-                                <button type="submit" onClick="submitChangePassword()"
-                                    class="btn btn-success btn-lg float-right">Save</button>
-                            </div>
                     </div>
                 </div>
 
@@ -80,10 +78,11 @@
                         <h3 class="mb-0">Change Email</h3>
                     </div>
                     <div class="card-body">
-                        <form class="form" role="form" autocomplete="off">
+                        <form class="form" role="form" autocomplete="off"
+                            th:action="@{'/editUser/changeEmail/'+ ${user.id}}" method="post">
                             <div class="form-group">
                                 <label for="inputResetPasswordEmail">New Email</label>
-                                <input type="email" class="form-control" id="inputResetPasswordEmail" required="">
+                                <input type="email" class="form-control" id="inputResetPasswordEmail" required="" name="email">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-lg float-right">Save</button>
@@ -99,41 +98,5 @@
         </div>
     </div>
 </body>
-
-<script type="text/javascript">
-    function submitChangePassword() {
-        var params = {};
-        console.log("---------------------------------------------------")
-        params["id"] = $("#id").val();
-        params["newPassword"] = $("#newPassword").val();
-        params["confirmPassword"] = $("#confirmPassword").val();
-
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: "/editUser/changePassword",
-            data: JSON.stringify(params),
-            dataType: 'text',
-            cache: false,
-            timeout: 600000,
-            success: function (data) {
-                $("#changePasswordForm")[0].reset();
-
-                $("#changePasswordError").addClass("d-none");
-                $("#formSuccess").removeClass("d-none");
-                $("#formSuccess").html("Password Actualizado exitosmante!.");
-
-                $('#changePasswordModal').modal('toggle');
-                setTimeout(function () { $("#formSuccess").hide('slow'); }, 2000);
-            },
-            error: function (e) {
-                $("#changePasswordError").removeClass("d-none");
-                $("#formSuccess").addClass("d-none");
-                $("#changePasswordError").html(e.responseText);
-            }
-        });
-
-    }
-</script>
 
 </html>
