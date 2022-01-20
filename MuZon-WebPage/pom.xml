@@ -80,7 +80,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.4.0</version>
 				<configuration>
-					<mainClass>src.main.java.com.muZon.aplicacion.AplicaionApplication</mainClass>
+					<mainClass>main.java.com.muZon.aplicacion.AplicaionApplication</mainClass>
 				</configuration>
 			</plugin>
 
