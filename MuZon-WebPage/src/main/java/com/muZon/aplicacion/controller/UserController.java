@@ -67,7 +67,7 @@ public class UserController {
 
 	@GetMapping("/signin")
 	public String signin(Model model) {
-		return "user-form/user-signin";
+		return "index";
 	}
 
 	@PostMapping("/signup")
