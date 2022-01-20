@@ -18,6 +18,7 @@ import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.Role;
 import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
+import com.muZon.aplicacion.repository.CartRepository;
 import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.RoleRepository;
 import com.muZon.aplicacion.service.GrafanaService;
@@ -56,6 +57,9 @@ public class UserController {
 	@Autowired
 	ProductRepository productRepository;
 
+	@Autowired
+	CartRepository cartRepository;
+
 	@GetMapping({ "/", "/login" })
 	public String index() {
 		return "index";
@@ -75,7 +79,7 @@ public class UserController {
 
 	@GetMapping("/signin")
 	public String signin(Model model) {
-		return "user-form/user-signin";
+		return "index";
 	}
 
 	@PostMapping("/signup")
@@ -110,6 +114,7 @@ public class UserController {
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
 		model.addAttribute("productList", productRepository.findAll());
+		model.addAttribute("cartList", cartRepository.findAll());
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
 
