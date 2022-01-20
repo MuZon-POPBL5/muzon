@@ -76,7 +76,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.muzon.exec</groupId>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.4.0</version>
 				<configuration>
