@@ -69,6 +69,14 @@
 
     </dependencies>
 
+	<distributionManagement>
+		<repository>
+			<id>muzondeploy directory</id>
+			<url>file:///muzondeploy</url>
+		</repository>
+	</distributionManagement>
+
+
 	<build>
 		<pluginManagement>
 			<plugins>
