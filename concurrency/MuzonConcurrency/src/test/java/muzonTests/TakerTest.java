@@ -27,7 +27,7 @@ public class TakerTest {
 	 * @author Ander Palacios APalacios
 	 * @date 18/1/2022
 	 * @return void
-	 * @throws InterruptedException when something cant be added or removed from the buffer
+	 * @throws InterruptedException when something can not be added or removed from the buffer
 	*/	
 	
 	

@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * @file AllTests.java
- * @brief This test suite executes all the test cases of the first version
+ * @brief This test suite executes all the test cases of the first solution
  * @author Ander Palacios APalacios
  * @version v1.0.0
  * @date 18/01/2022
