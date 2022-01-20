@@ -2,6 +2,7 @@ package com.muZon.aplicacion.controller;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,12 +13,14 @@ import javax.validation.Valid;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.GrafanaMetrics;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.Role;
 import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
 import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.RoleRepository;
+import com.muZon.aplicacion.service.GrafanaService;
 import com.muZon.aplicacion.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +42,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
+	static String category;
+
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	GrafanaService grafanaService;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -90,7 +98,14 @@ public class UserController {
 	}
 
 	@GetMapping("/userForm")
-	public String userForm(Model model) {
+	public String userForm(Model model) throws Exception {
+		GrafanaMetrics metricsGraf= new GrafanaMetrics();
+        Date today = new Date();
+        metricsGraf.setSqlTimestamp(today);
+        Integer numLogs = metricsGraf.getNumLogins();
+        metricsGraf.setNumLogins(++numLogs);
+        grafanaService.saveGrafanaMetrics(metricsGraf);
+		
 		model.addAttribute("userForm", new User());
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
@@ -210,7 +225,7 @@ public class UserController {
 	}
 
 	@GetMapping("/deleteUser/{id}")
-	public String deleteUser(Model model, @PathVariable(name = "id") Long id) {
+	public String deleteUser(Model model, @PathVariable(name = "id") Long id) throws Exception {
 		try {
 			userService.deleteUser(id);
 		} catch (Exception e) {
@@ -325,7 +340,7 @@ public class UserController {
 		User seller = userService.getUserById(id);
 
 		try {
-			userService.addProduct(seller, product);
+			userService.addProduct(seller, product, this.category);
 		} catch (CustomeFieldValidationException cfve) {
 			result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
 		} catch (Exception e) {
@@ -333,6 +348,16 @@ public class UserController {
 		}
 
 		return "redirect:/userForm";
+	}
+
+	@PostMapping("/addProduct")
+	public ResponseEntity<?> passingCategory(@RequestBody String category) throws Exception {
+
+		String split = category.split("[:]")[1];
+		String onlyComillas = split.split("[}]")[0];
+		this.category = onlyComillas.replaceAll("^\"|\"$", "");
+
+		return ResponseEntity.ok("Success");
 	}
 
 	@PostMapping("/upload")
@@ -352,5 +377,57 @@ public class UserController {
 		}
 
 		return ResponseEntity.ok("Success");
+	}
+
+	@GetMapping("/displayProduct/{id}")
+	public String display(Model model, @PathVariable(name = "id") Long id) throws Exception {
+		Product productToDisplay = productRepository.findById(id).orElseThrow();
+
+		model.addAttribute("product", productToDisplay);
+		model.addAttribute("editMode", "true");
+
+		return "user-form/buyProduct";
+	}
+
+	@PostMapping("/displayProducts/{id}")
+	public String displayCarrousel(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
+			throws Exception {
+		User user = userService.getUserById(id);
+
+		model.addAttribute("user", user);
+		model.addAttribute("editMode", "true");
+
+		if (data.split("[=]")[0].equals("ccate")) {
+			String category = data.split("[=]")[1];
+			model.addAttribute("categoryList", productRepository.findByCategory(category));
+			
+			return "user-form/productsPage";
+		} else {
+			String idP = data.split("[=]")[1];
+			Product productToDisplay = productRepository.findById(Long.valueOf(idP)).orElseThrow();
+			model.addAttribute("product", productToDisplay);
+
+			return "user-form/buyProduct";
+		}
+	}
+
+	@PostMapping("/addToCart/{id}")
+	public String addToCart(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
+			throws Exception {
+		Product productToSave = productRepository.findById(id).orElseThrow();
+
+		String userData = data.split("[,]")[0];
+		String userId = userData.split("[=]")[1];
+		String quantityData = data.split("[,]")[1];
+		String quantity = quantityData.split("[=]")[1];
+
+		User user = userService.getUserById(Long.valueOf(userId));
+
+		// model.addAttribute("user", userToEdit);
+		model.addAttribute("editMode", "true");
+
+		userService.addToCart(productToSave, Integer.valueOf(quantity), user);
+
+		return "index";
 	}
 }

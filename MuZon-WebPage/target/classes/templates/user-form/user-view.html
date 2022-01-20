@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>User Information and Form</title>
+	<title>Muzon</title>
 
 	<!--JQUERY-->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -46,10 +46,6 @@
 						role="tab" aria-controls="list" aria-selected="false"><i class="fas fa-home"></i></a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" th:if="${#authorization.expression('hasRole(''USER'')')}" th:classappend=" ${shopTab}" id="shop-tab" data-toggle="tab" href="#uShop"
-						role="tab" aria-controls="list" aria-selected="false"><i class="fas fa-shopping-basket"></i></a>
-				</li>
-				<li class="nav-item">
 					<a class="nav-link" th:if="${#authorization.expression('hasRole(''USER'')')}" th:classappend=" ${cartTab}" id="cart-tab" data-toggle="tab" href="#uCart"
 						role="tab" aria-controls="list" aria-selected="false"><i class="fas fa-shopping-cart"></i></a>
 				</li>
@@ -82,14 +78,6 @@
 
 							<div th:include="user-form/pageFooter.html" th:remove="tag"></div>
 							
-						</div>
-					</div>
-				</div>
-				<div class="tab-pane fade show" th:if="${#authorization.expression('hasRole(''USER'')')}" th:classappend=" ${shopTab}" id="uShop" role="tabpanel"
-					aria-labelledby="list-tab">
-					<div class="card">
-						<div class="card-body">
-							<div th:include="user-form/productsPage.html" th:remove="tag"></div>
 						</div>
 					</div>
 				</div>

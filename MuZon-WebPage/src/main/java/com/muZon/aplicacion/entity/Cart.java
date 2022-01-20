@@ -9,13 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Product implements Serializable {
+public class Cart implements Serializable {
 
     /**
      * 
@@ -28,19 +27,6 @@ public class Product implements Serializable {
     private Long id;
 
     @Column
-    private String name;
-
-    @Column
-    private String description;
-
-    @Column
-    private String category;
-
-    @Lob
-    @Column
-    private byte[] imgSrc;
-
-    @Column
     private float price;
 
     @Column
@@ -50,44 +36,16 @@ public class Product implements Serializable {
     @JoinColumn(name = "sellerId", referencedColumnName = "id")
     private User sellerId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId", referencedColumnName = "id")
+    private Product productId;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public byte[] getImgSrc() {
-        return imgSrc;
-    }
-
-    public void setImgSrc(byte[] imgSrc) {
-        this.imgSrc = imgSrc;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCategory() {
-        return description;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public int getQuantity() {
@@ -114,18 +72,23 @@ public class Product implements Serializable {
         this.sellerId = sellerId;
     }
 
+    public Product getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Product productId) {
+        this.productId = productId;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((imgSrc == null) ? 0 : imgSrc.hashCode());
         result = prime * result + ((quantity == 0) ? 0 : quantity);
         result = prime * result + ((price == 0) ? 0 : Math.round(price));
         result = prime * result + ((sellerId == null) ? 0 : sellerId.hashCode());
-        result = prime * result + ((category == null) ? 0 : category.hashCode());
+        result = prime * result + ((productId == null) ? 0 : productId.hashCode());
         return result;
     }
 
@@ -137,26 +100,11 @@ public class Product implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Product other = (Product) obj;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
-            return false;
+        Cart other = (Cart) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (imgSrc == null) {
-            if (other.imgSrc != null)
-                return false;
-        } else if (!imgSrc.equals(other.imgSrc))
             return false;
         if (quantity == 0) {
             if (other.quantity != -1)
@@ -173,18 +121,17 @@ public class Product implements Serializable {
                 return false;
         } else if (!sellerId.equals(other.sellerId))
             return false;
-        if (category == null) {
-            if (other.category != null)
+        if (productId == null) {
+            if (other.productId != null)
                 return false;
-        } else if (!category.equals(other.category))
+        } else if (!productId.equals(other.productId))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Role [id=" + id + ", name=" + name + ", description=" + description +
-                ", imgSrc=" + imgSrc + ", quantity=" + quantity + ", price=" + price
-                + ", sellerId=" + sellerId + ", category=" + category + "]";
+        return "Role [id=" + id + ", sellerId=" + sellerId + ", productId=" + productId + 
+        ", quantity=" + quantity + ", price=" + price + "]";
     }
 }

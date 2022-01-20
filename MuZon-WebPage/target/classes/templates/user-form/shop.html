@@ -6,6 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!--JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
@@ -23,7 +28,11 @@
 </head>
 
 <body>
-    <div class="container-fluid pt-1">
+    <div id="back" class="d-none container pt-2 px-1 mx-3">
+        <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
+    </div>
+
+    <div id="searchAndSell" class="container-fluid pt-1">
         <div class="row flex-nowrap justify-content-between mb-4">
             <form class="row col-9 container-fluid mx-0 px-0" method="post"
                 action="controlador----------------------------">
@@ -44,6 +53,7 @@
                             <button class="btn btn-outline-secondary text-dark text-center" type="submit">
                                 <i class="fas fa-plus text-dark" alt="Icon to add new products for selling"></i> Sell
                             </button>
+                            <div id="idU" th:text="${user.id}" class="d-none"></div>
                         </a>
                     </tr>
                 </div>
@@ -51,219 +61,240 @@
         </div>
     </div>
 
-    <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
-        <div class="carousel-inner pb-3">
-            <div class="carousel-item active">
-                <div class="container d-flex justify-content-around px-3">
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <img src="https://img.icons8.com/ios/150/000000/hanger.png" class="p-0 m-0" style="width: 39%;"/>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Clothes</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
+    <div id="principal" class="container-fluid">
+        <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-inner pb-3">
+                <div class="carousel-item active">
+                    <div class="container d-flex justify-content-around px-3">
 
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-coffee fa-5x"></i>
+                        <div><a onclick="displayCarrousel('clothes')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <img src="https://img.icons8.com/ios/150/000000/hanger.png" class="p-0 m-0"
+                                            style="width: 39%;" />
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Clothes</b></h6>
+                                    </div>
                                 </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Cups</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
+                            </a></div>
 
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-book fa-5x"></i>
+                        <div><a onclick="displayCarrousel('cups')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-coffee fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Cups</b></h6>
+                                    </div>
                                 </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Books</b></h6>
+                            </a></div>
+
+                        <div><a onclick="displayCarrousel('books')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-book fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Books</b></h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </a></div>
+                            </a></div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="container d-flex justify-content-around px-3">
+                        <div><a onclick="displayCarrousel('music')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-headphones fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Music</b></h6>
+                                    </div>
+                                </div>
+                            </a></div>
+
+                        <div><a onclick="displayCarrousel('utensils')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-utensils fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Utensils</b></h6>
+                                    </div>
+                                </div>
+                            </a></div>
+
+                        <div><a onclick="displayCarrousel('hygiene')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fa fa-shower fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Hygiene</b></h6>
+                                    </div>
+                                </div>
+                            </a></div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="container d-flex justify-content-around px-3">
+                        <div><a onclick="displayCarrousel('bicycle')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fa fa-bicycle fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Bicycle</b></h6>
+                                    </div>
+                                </div>
+                            </a></div>
+
+                        <div><a onclick="displayCarrousel('medical')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-band-aid fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Medical</b></h6>
+                                    </div>
+                                </div>
+                            </a></div>
+
+                        <div><a onclick="displayCarrousel('briefcases')" class="text-decoration-none text-dark">
+                                <div class="card" style="width: 15rem;">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-briefcase fa-5x"></i>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <h6><b>Briefcases</b></h6>
+                                    </div>
+                                </div>
+                            </a></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="carousel-item">
-                <div class="container d-flex justify-content-around px-3">
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-headphones fa-5x"></i>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Music</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev" style="width: 10%;height: 80%;">
+                <span><i class="fas fa-chevron-circle-left text-dark fa-lg" aria-hidden="true"></i></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next" style="width: 10%;height: 80%;">
+                <i class="fas fa-chevron-circle-right text-dark fa-lg" aria-hidden="true"></i>
+                <span class="visually-hidden">Next</span>
+            </button>
 
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-utensils fa-5x"></i>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Utensils</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
-
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fa fa-shower fa-5x"></i>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Hygiene</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
+            <div class="container pt-4">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
                 </div>
             </div>
-
-            <div class="carousel-item">
-                <div class="container d-flex justify-content-around px-3">
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fa fa-bicycle fa-5x"></i>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Bicycle</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
-
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-band-aid fa-5x"></i>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Medical</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
-
-                    <div><a href="#" class="text-decoration-none text-dark">
-                            <div class="card" style="width: 15rem;">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-briefcase fa-5x"></i>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <h6><b>Briefcases</b></h6>
-                                </div>
-                            </div>
-                        </a></div>
-                </div>
-            </div>
-
-
         </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="prev" style="width: 10%;height: 80%;">
-            <span><i class="fas fa-chevron-circle-left text-dark fa-lg" aria-hidden="true"></i></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="next" style="width: 10%;height: 80%;">
-            <i class="fas fa-chevron-circle-right text-dark fa-lg" aria-hidden="true"></i>
-            <span class="visually-hidden">Next</span>
-        </button>
-
-        <div class="container pt-4">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
+        <div class="container-fluid box border-0 mb-3 mx-0 px-0">
+            <h6>Recommended Products</h6>
+            <div class="list-group list-group-horizontal bg-white overflow-auto text-nowrap flex-row border-0 p-0">
+                <tr th:each="product: ${productList}">
+                    <a onclick="displayProduct()" class=" list-group-item list-group-item-action
+                    bg-transparent border-0 py-2 my-0">
+                        <img src="img/spanishFlag.png" class="py-0" alt="...">
+                    </a>
+                    <div class="d-none" id="idP" th:text="${product.id}"></div>
+                </tr>
             </div>
         </div>
-    </div>
 
-    <div>
-        <tr th:each="product: ${productList}">
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.imgSrc}"></td>
-            <td th:text="${product.description}"></td>
-            <img src="data:image/png;base32,${product.imgSrc}" alt="Red dot">
-        </tr>
-    </div>
 
-    <div class="container-fluid box border-0 mb-3 mx-0 px-0">
-        <h6>Recommended Products</h6>
-        <div class="list-group list-group-horizontal bg-white overflow-auto text-nowrap flex-row border-0 p-0">
-            <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 py-2 my-0">
-                <img src="img/spanishFlag.png" class="py-0" alt="...">
-            </a>
-            <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 py-2 my-0">
-                <img src="img/spanishFlag.png" class="py-0" alt="...">
-            </a>
-            <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 py-2 my-0">
-                <img src="img/spanishFlag.png" class="py-0" alt="...">
-            </a>
-            <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 py-2 my-0">
-                <img src="img/spanishFlag.png" class="py-0" alt="...">
-            </a>
-            <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 py-2 my-0">
-                <img src="img/spanishFlag.png" class="py-0" alt="...">
-            </a>
-        </div>
-    </div>
-
-    <div class="container-fluid mb-3 p-0">
-        <div class="d-flex justify-content-between flex-nowrap gap-3">
-            <div class="box border-0">
-                <h6 class="m-1">Most Sold</h6>
-                <div class="d-flex flex-wrap">
-                    <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                            alt="...">
+        <div class="container-fluid mb-3 p-0">
+            <div class="d-flex justify-content-between flex-nowrap gap-3">
+                <div class="box border-0">
+                    <h6 class="m-1">Most Sold</h6>
+                    <div class="d-flex flex-wrap">
                         <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
                                 alt="...">
+                            <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png"
+                                    class="p-1" alt="...">
+                    </div>
+                    <a href="#" class="m-1">Show more</a>
                 </div>
-                <a href="#" class="m-1">Show more</a>
-            </div>
-            <div class="box border-0">
-                <h6 class="m-1">Newness</h6>
-                <div class="d-flex flex-wrap">
-                    <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                            alt="...">
+                <div class="box border-0">
+                    <h6 class="m-1">Newness</h6>
+                    <div class="d-flex flex-wrap">
                         <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
                                 alt="...">
+                            <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png"
+                                    class="p-1" alt="...">
+                    </div>
+                    <a href="#" class="m-1">Show more</a>
                 </div>
-                <a href="#" class="m-1">Show more</a>
-            </div>
-            <div class="box border-0">
-                <h6 class="m-1">Offers</h6>
-                <div class="d-flex flex-wrap">
-                    <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                            alt="...">
+                <div class="box border-0">
+                    <h6 class="m-1">Offers</h6>
+                    <div class="d-flex flex-wrap">
                         <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
                                 alt="...">
+                            <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png"
+                                    class="p-1" alt="...">
+                    </div>
+                    <a href="#" class="m-1">Show more</a>
                 </div>
-                <a href="#" class="m-1">Show more</a>
-            </div>
-            <div class="box border-0">
-                <h6 class="m-1"></h6>
-                <div class="d-flex flex-wrap">
-                    <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                            alt="...">
-                        <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                                alt="...">
-                </div>
-                <a href="#" class="m-1">Show more</a>
             </div>
         </div>
     </div>
+
+    <div id="cambios" class="d-none container-fluid"></div>
 </body>
+
+<script>
+    function displayCarrousel(clicked) {
+        var http = new XMLHttpRequest();
+        var idU = $("#idU").text();
+        var url = "/displayProducts/" + idU;
+
+        http.open('POST', url, true);
+
+        http.onreadystatechange = function () {//Call a function when the state changes.
+            if (http.status == 200) {
+                $("#cambios").removeClass("d-none");
+                $("#cambios").html(http.responseText);
+                $("#principal").addClass("d-none");
+                $("#back").removeClass("d-none");
+                $("#searchAndSell").addClass("d-none");
+            }
+        }
+
+        http.send("ccate=" + clicked);
+    }    
+
+    function displayProduct(){
+        var http = new XMLHttpRequest();
+        var idU = $("#idU").text();
+        var idP = $("#idP").text();
+        var url = "/displayProducts/" + idU;
+
+        http.open('POST', url, true);
+
+        http.onreadystatechange = function () {//Call a function when the state changes.
+            if (http.status == 200) {
+                $("#cambios").removeClass("d-none");
+                $("#cambios").html(http.responseText);
+                $("#principal").addClass("d-none");
+                $("#back").removeClass("d-none");
+                $("#searchAndSell").addClass("d-none");
+            }
+        }
+
+        http.send("cp=" + idP);
+    }
+</script>
 
 </html>

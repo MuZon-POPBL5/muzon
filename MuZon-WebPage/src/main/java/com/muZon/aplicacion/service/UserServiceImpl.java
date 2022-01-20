@@ -1,23 +1,17 @@
 package com.muZon.aplicacion.service;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Optional;
-
-import javax.imageio.ImageIO;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.User;
+import com.muZon.aplicacion.repository.CartRepository;
 import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	ProductRepository repositoryProduct;
+
+	@Autowired
+	CartRepository repositoryCart;
 
 	@Override
 	public Iterable<User> getAllUsers() {
@@ -146,14 +143,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Product addProduct(User seller, Product product) throws Exception {
+	public Product addProduct(User seller, Product product, String category) throws Exception {
 
 		Product newProduct = new Product();
 		newProduct.setName(product.getName());
 		newProduct.setDescription(product.getDescription());
 		newProduct.setPrice(product.getPrice());
 		newProduct.setImgSrc(this.imgSrc);
+		//imgSrc = new byte[];
 		newProduct.setQuantity(product.getQuantity());
+		newProduct.setCategory(category);
 		Optional<User> sellerData = repository.findById(seller.getId());
 		newProduct.setSellerId(sellerData.get());
 		 
@@ -170,5 +169,17 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(newEmail);
 
 		return repository.save(user);
+	}
+
+	@Override
+	public Cart addToCart(Product productToSave, Integer quantity, User user) {
+		Cart cart = new Cart();
+		
+		cart.setProductId(productToSave);
+		cart.setQuantity(quantity);
+		cart.setPrice(quantity*productToSave.getPrice());
+		cart.setSellerId(user);
+
+		return repositoryCart.save(cart);
 	}
 }
