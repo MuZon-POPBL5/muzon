@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"solution1"},{"l":"solution2"},{"l":"solution3"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"muzonTests"},{"l":"muzonTestsV2"},{"l":"muzonTestsV3"},{"l":"solution1"},{"l":"solution2"},{"l":"solution3"}]
