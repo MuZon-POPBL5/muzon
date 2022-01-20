@@ -25,6 +25,10 @@
     <script src="lib/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 
 <body>
@@ -252,6 +256,15 @@
     </div>
 
     <div id="cambios" class="d-none container-fluid"></div>
+
+    <div class="d-none py-3 footer fixed-bottom text-end" id="backtotop">
+        <span class="fa-stack mx-2 fa-lg">
+            <a href="#">
+                <img src=https://cdn.jsdelivr.net/npm/bootstrap-icons/icons/arrow-up-circle-fill.svg width="32"
+                    height="32" alt="">
+            </a>
+        </span>
+    </div>
 </body>
 
 <script>
@@ -273,9 +286,9 @@
         }
 
         http.send("ccate=" + clicked);
-    }    
+    }
 
-    function displayProduct(){
+    function displayProduct() {
         var http = new XMLHttpRequest();
         var idU = $("#idU").text();
         var idP = $("#idP").text();
@@ -294,6 +307,29 @@
         }
 
         http.send("cp=" + idP);
+    }
+
+    var prevScrollpos = window.pageYOffset;
+    var first = 0;
+    window.onscroll = function () {
+        var currentScrollPos = window.pageYOffset;
+
+        console.log(currentScrollPos);
+        if (currentScrollPos == 0) {
+            console.log("sdad");
+            $("#backtotop").addClass("d-none");
+            first = 0;
+
+        } else if (currentScrollPos > 20) {
+            $("#backtotop").removeClass("d-none");
+            console.log(first);
+            if (first == 0) {
+                $('#backtotop').fadeTo(0, 0);
+                first = 1;
+                $('#backtotop').fadeTo(1000, 1);
+            }
+        }
+        prevScrollpos = currentScrollPos;
     }
 </script>
 

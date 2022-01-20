@@ -379,16 +379,6 @@ public class UserController {
 		return ResponseEntity.ok("Success");
 	}
 
-	@GetMapping("/displayProduct/{id}")
-	public String display(Model model, @PathVariable(name = "id") Long id) throws Exception {
-		Product productToDisplay = productRepository.findById(id).orElseThrow();
-
-		model.addAttribute("product", productToDisplay);
-		model.addAttribute("editMode", "true");
-
-		return "user-form/buyProduct";
-	}
-
 	@PostMapping("/displayProducts/{id}")
 	public String displayCarrousel(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
 			throws Exception {
@@ -427,6 +417,26 @@ public class UserController {
 		model.addAttribute("editMode", "true");
 
 		userService.addToCart(productToSave, Integer.valueOf(quantity), user);
+
+		return "index";
+	}
+
+	@PostMapping("/buyNow/{id}")
+	public String buyNow(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
+			throws Exception {
+		Product productToSave = productRepository.findById(id).orElseThrow();
+
+		String userData = data.split("[,]")[0];
+		String userId = userData.split("[=]")[1];
+		String quantityData = data.split("[,]")[1];
+		String quantity = quantityData.split("[=]")[1];
+
+		User user = userService.getUserById(Long.valueOf(userId));
+
+		// model.addAttribute("user", userToEdit);
+		model.addAttribute("editMode", "true");
+
+		userService.addBuyNow(productToSave, Integer.valueOf(quantity), user);
 
 		return "index";
 	}

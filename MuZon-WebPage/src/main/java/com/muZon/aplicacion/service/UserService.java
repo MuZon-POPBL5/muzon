@@ -3,6 +3,7 @@ package com.muZon.aplicacion.service;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Buy;
 import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.User;
@@ -32,4 +33,6 @@ public interface UserService {
 	public User changeEmail(User user, String newEmail);
 
     public Cart addToCart(Product productToSave, Integer quantity, User user);
+
+	public Buy addBuyNow(Product productToSave, Integer quantity, User user);
 }

@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Cart implements Serializable {
+public class Buy implements Serializable {
 
     /**
      * 
@@ -100,7 +100,7 @@ public class Cart implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Cart other = (Cart) obj;
+        Buy other = (Buy) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -131,7 +131,7 @@ public class Cart implements Serializable {
 
     @Override
     public String toString() {
-        return "Cart [id=" + id + ", sellerId=" + sellerId + ", productId=" + productId + 
+        return "Buy [id=" + id + ", sellerId=" + sellerId + ", productId=" + productId + 
         ", quantity=" + quantity + ", price=" + price + "]";
     }
 }

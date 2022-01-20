@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Buy;
 import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.User;
+import com.muZon.aplicacion.repository.BuyRepository;
 import com.muZon.aplicacion.repository.CartRepository;
 import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.UserRepository;
@@ -30,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	CartRepository repositoryCart;
+
+	@Autowired
+	BuyRepository repositoryBuy;
 
 	@Override
 	public Iterable<User> getAllUsers() {
@@ -181,5 +186,17 @@ public class UserServiceImpl implements UserService {
 		cart.setSellerId(user);
 
 		return repositoryCart.save(cart);
+	}
+
+	@Override
+	public Buy addBuyNow(Product productToSave, Integer quantity, User user) {
+		Buy buy = new Buy();
+
+		buy.setProductId(productToSave);
+		buy.setQuantity(quantity);
+		buy.setPrice(quantity*productToSave.getPrice());
+		buy.setSellerId(user);
+
+		return repositoryBuy.save(buy);
 	}
 }
