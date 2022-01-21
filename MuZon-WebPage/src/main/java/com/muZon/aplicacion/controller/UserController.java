@@ -13,14 +13,17 @@ import javax.validation.Valid;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Address;
 import com.muZon.aplicacion.entity.GrafanaMetrics;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.Role;
 import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
+import com.muZon.aplicacion.repository.AddressRepository;
 import com.muZon.aplicacion.repository.CartRepository;
 import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.RoleRepository;
+import com.muZon.aplicacion.service.AddressService;
 import com.muZon.aplicacion.service.GrafanaService;
 import com.muZon.aplicacion.service.UserService;
 
@@ -52,13 +55,19 @@ public class UserController {
 	GrafanaService grafanaService;
 
 	@Autowired
+	AddressService addressService;
+
+	@Autowired
 	RoleRepository roleRepository;
 
 	@Autowired
 	ProductRepository productRepository;
 
-	@Autowired
+	@Autowired 
 	CartRepository cartRepository;
+
+	@Autowired
+	AddressRepository addressRepository;
 
 	@GetMapping({ "/", "/login" })
 	public String index() {
@@ -115,6 +124,7 @@ public class UserController {
 		model.addAttribute("roles", roleRepository.findAll());
 		model.addAttribute("productList", productRepository.findAll());
 		model.addAttribute("cartList", cartRepository.findAll());
+		model.addAttribute("addressList", addressRepository.findAll());
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
 
@@ -124,8 +134,10 @@ public class UserController {
 	@GetMapping("/selectAddress/{id}")
 	public String getShowAddressForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
 		User user = userService.getUserById(id);
+		//Address address = addressService.getAddressByUserId(user);
 
-		model.addAttribute("userAddress", user);
+		model.addAttribute("user", user);
+		model.addAttribute("addressList", addressRepository.findAll());
 		model.addAttribute("addressForm", new ChangeAddressForm(id));
 		model.addAttribute("editMode", "true");
 
@@ -299,7 +311,7 @@ public class UserController {
 
 				throw new Exception(result);
 			}
-			userService.changeAddress(form);
+			addressService.changeAddress(form);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

@@ -4,10 +4,12 @@ import java.util.Optional;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Address;
 import com.muZon.aplicacion.entity.Buy;
 import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.User;
+import com.muZon.aplicacion.repository.AddressRepository;
 import com.muZon.aplicacion.repository.BuyRepository;
 import com.muZon.aplicacion.repository.CartRepository;
 import com.muZon.aplicacion.repository.ProductRepository;
@@ -36,6 +38,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	BuyRepository repositoryBuy;
 
+	@Autowired
+	AddressRepository repositoryAddress;
+
 	@Override
 	public Iterable<User> getAllUsers() {
 		return repository.findAll();
@@ -57,6 +62,11 @@ public class UserServiceImpl implements UserService {
 		if (checkUsernameAvailable(user)) {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			user = repository.save(user);
+			Address address = new Address();
+
+			address.setUser(user);
+			address.setAddress("Default");
+			repositoryAddress.save(address);
 		}
 		return user;
 	}
@@ -121,16 +131,6 @@ public class UserServiceImpl implements UserService {
 		}
 		String encodedPassword = bCryptPasswordEncoder.encode(confirmPassowrd);
 		user.setPassword(encodedPassword);
-		return repository.save(user);
-	}
-
-	@Override
-	public User changeAddress(ChangeAddressForm form) throws Exception {
-		User user = getUserById(form.getId());
-
-		user.setAddress(form.getNewAddress());
-		// user.setAddress("c " + form.getNewAddress() + form.getNewCity() + ", " +
-		// form.getNewZipCode() + ", " + form.getNewCountry());
 		return repository.save(user);
 	}
 
