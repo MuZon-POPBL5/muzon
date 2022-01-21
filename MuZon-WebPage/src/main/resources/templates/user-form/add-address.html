@@ -1,5 +1,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
 <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalTitle"
   aria-hidden="true">
@@ -16,12 +16,15 @@ integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="ano
           <input class="form-control" type="hidden" th:field="${addressForm.id}">
           <div class="col-12">
             <input class="form-control" type="text" th:field="${addressForm.newAddress}">
-            <div class="alert-danger" th:if="${#fields.hasErrors('newAddress')}" th:errors="*{newAddress}">New Address</div>
+            <div class="alert-danger" th:if="${#fields.hasErrors('newAddress')}" th:errors="*{newAddress}">New Address
+            </div>
           </div>
       </div>
       </form>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a th:href="@{/userForm/cancel}">
+          <button type="button" class="btn btn-secondary">Close</button>
+        </a>
         <button type="button" onClick="submitAddAddress()" class="btn btn-primary">Save changes</button>
       </div>
     </div>
@@ -58,6 +61,5 @@ integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="ano
         $("#addAddressError").html(e.responseText);
       }
     });
-
   }
 </script>

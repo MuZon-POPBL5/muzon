@@ -1,5 +1,7 @@
 package com.muZon.aplicacion.repository;
 
+import java.util.List;
+
 import com.muZon.aplicacion.entity.Address;
 import com.muZon.aplicacion.entity.User;
 
@@ -9,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AddressRepository extends CrudRepository<Address, Long>{
 
-    Address findByUser(User user);
+    public List<Address> findByUser(User user);
 }

@@ -111,33 +111,38 @@ public class UserController {
 	}
 
 	@GetMapping("/userForm")
-	public String userForm(Model model) throws Exception {
-		GrafanaMetrics metricsGraf= new GrafanaMetrics();
-        Date today = new Date();
-        metricsGraf.setSqlTimestamp(today);
-        Integer numLogs = metricsGraf.getNumLogins();
-        metricsGraf.setNumLogins(++numLogs);
-        grafanaService.saveGrafanaMetrics(metricsGraf);
-		
+	public String userForm(Model model) throws Exception {		
 		model.addAttribute("userForm", new User());
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
 		model.addAttribute("productList", productRepository.findAll());
 		model.addAttribute("cartList", cartRepository.findAll());
-		model.addAttribute("addressList", addressRepository.findAll());
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
 
 		return "user-form/user-view";
 	}
 
+	@GetMapping("/loginCount")
+	public String loginCount(Model model) throws Exception {		
+		GrafanaMetrics metricsGraf= new GrafanaMetrics();
+        Date today = new Date();
+        metricsGraf.setSqlTimestamp(today);
+		Integer numLogs = 1;
+        metricsGraf.setNumLogins(numLogs);
+        grafanaService.saveGrafanaMetrics(metricsGraf);
+
+		return "redirect:/userForm";
+	}
+
 	@GetMapping("/selectAddress/{id}")
 	public String getShowAddressForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
 		User user = userService.getUserById(id);
-		//Address address = addressService.getAddressByUserId(user);
-
+		
+		List<Address> addresses = addressRepository.findByUser(user);
+	
 		model.addAttribute("user", user);
-		model.addAttribute("addressList", addressRepository.findAll());
+		model.addAttribute("addressList", addresses);
 		model.addAttribute("addressForm", new ChangeAddressForm(id));
 		model.addAttribute("editMode", "true");
 
@@ -302,7 +307,7 @@ public class UserController {
 	}
 
 	@PostMapping("/editUser/addAddress")
-	public ResponseEntity<?> postAddAddress(@Valid @RequestBody ChangeAddressForm form, Errors errors) {
+	public ResponseEntity<?> postAddAddress(@Valid @RequestBody ChangeAddressForm form, Errors errors) {		
 		try {
 			if (errors.hasErrors()) {
 				String result = errors.getAllErrors()
