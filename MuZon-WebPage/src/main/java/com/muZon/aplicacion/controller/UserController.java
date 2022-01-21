@@ -427,7 +427,7 @@ public class UserController {
 	}
 
 	@PostMapping("/buyNow/{id}")
-	public String buyNow(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
+	public ResponseEntity<String> buyNow(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
 			throws Exception {
 		Product productToSave = productRepository.findById(id).orElseThrow();
 
@@ -443,6 +443,6 @@ public class UserController {
 
 		userService.addBuyNow(productToSave, Integer.valueOf(quantity), user);
 
-		return "index";
+		return ResponseEntity.ok("Success");
 	}
 }

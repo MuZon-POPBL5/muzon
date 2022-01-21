@@ -35,6 +35,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
     <script src="lib/js/bootstrap.min.js"></script>
+
+    <link rel="icon" href="static/img/Muzon.png" type="image/x-icon">
 </head>
 
 <body>
@@ -48,7 +50,7 @@
     </ol>
 
     <tr th:each="product: ${cartList}">
-        <div class="container-fluid row mt-2">
+        <div class="container-fluid row mt-3">
             <div class="col-4 border border-dark rounded">
                 <img src="" class="card-img-top text-dark m-0 p-0" alt="Product image">
             </div>
@@ -57,15 +59,18 @@
                     <h5 class="card-title text-dark" th:text="${product.productId.name}"></h5>
                     <p class="card-text text-dark" th:text="${product.productId.description}"></p>
                 </div>
-                <p class="border border-dark rounded card-text text-dark bg-white w-5" th:text="${product.quantity}"></p>
+                <p class="border border-dark rounded card-text text-dark bg-white w-5" th:text="${product.quantity}">
+                </p>
             </div>
             <div class="col-2">
                 <div class="d-inline-flex">
-                    <h4 class="card-text text-dark" th:text="${product.price}"></h4>
+                    <h4 class="price card-text text-dark" th:text="${product.price}"></h4>
                     <h4>€</h4>
                 </div>
             </div>
         </div>
     </tr>
+
+    
 </body>
 </html>
