@@ -45,17 +45,23 @@
                 </div>
             </div>
             <div class="container-fluid mt-4">
-                <ul class="list-group list-group-flush m-0">
-                    <li class="list-group-item d-inline-flex m-0 p-0">
-                            <input class="form-control-plaintext ml-1" type="text" readonly
-                                th:field="${userAddress.address}">
-                        <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value="1" checked>
-                    </li>
-                    <li class="list-group-item"></li>
-                  </ul>
+                <div class="container d-flex flex-wrap justify-content-between">
+                    <tr th:each="addresses: ${addressList}">
+                        <div class="card my-2">
+                            <div class="card-header" th:text="${addresses.address}"></div>
+                            <div class="card-body">
+                                <blockquote class="blockquote mb-0">
+                                    <footer class="blockquote-footer">Someone famous in <cite
+                                            title="Source Title">Source Title</cite></footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </tr>
+                </div>
             </div>
             <div th:if="${editMode}" th:include="user-form/add-address.html" th:remove="tag"></div>
         </div>
-    </div>   
+    </div>
 </body>
+
 </html>

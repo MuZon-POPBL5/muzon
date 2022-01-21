@@ -2,10 +2,8 @@
 <html>
 
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" type="text/css" href="static/css/modalPassword.css" th:href="@{/css/modalPassword.css}">
+	<title>Muzon</title>
+	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
 </head>
 
 <body>
@@ -20,8 +18,7 @@
 						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark"
 							href="#" th:href="@{'/selectAddress/'+ ${user.id}}">Choose your address</a>
 						<button id="myBtn" onclick="displayModal()"
-							class="container btn btn-outline-primary btn-dark-teal text-decoration-none text-dark">Open
-							Modal</button>
+							class="container btn btn-outline-primary btn-dark-teal text-decoration-none text-dark">Delete Account</button>
 						<div id="myModal" class="modal">
 							<div class="modal-content">
 								<span class="close">&times;</span>
