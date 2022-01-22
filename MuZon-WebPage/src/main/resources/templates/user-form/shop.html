@@ -36,24 +36,6 @@
         <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
     </div>
 
-    <div id="searchAndSell" class="container-fluid pt-1">
-        <div class="row flex-nowrap justify-content-between mb-4">
-            <div class="col-3">
-                <div class="m-0 px-0 text-center">
-                    <tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
-                        <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})"
-                            class="p-0 m-0 text-decoration-none" href="#" th:href="@{'/sell/'+ ${user.id}}">
-                            <button class="btn btn-outline-secondary text-dark text-center" type="submit">
-                                <i class="fas fa-plus text-dark" alt="Icon to add new products for selling"></i> Sell
-                            </button>
-                            <div id="idU" th:text="${user.id}" class="d-none"></div>
-                        </a>
-                    </tr>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="principal" class="container-fluid">
         <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-inner pb-3">

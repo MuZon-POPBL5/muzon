@@ -1,9 +1,9 @@
 package com.muZon.aplicacion.service;
 
 
-import com.muZon.aplicacion.dto.ChangeAddressForm;
+import java.util.Optional;
+
 import com.muZon.aplicacion.dto.ChangePasswordForm;
-import com.muZon.aplicacion.entity.Address;
 import com.muZon.aplicacion.entity.Buy;
 import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.Product;
@@ -25,8 +25,6 @@ public interface UserService {
 
 	public User changePasswordById(Long id, String newPassword, String confirmPassowrd) throws Exception;
 
-	
-	
 	public Product addProduct(User seller, Product product, String category) throws Exception;
 
 	public void save(byte[] bytes);
@@ -36,4 +34,6 @@ public interface UserService {
     public Cart addToCart(Product productToSave, Integer quantity, User user);
 
 	public Buy addBuyNow(Product productToSave, Integer quantity, User user);
+
+    public Optional<User> getUserByUsername(String username);
 }

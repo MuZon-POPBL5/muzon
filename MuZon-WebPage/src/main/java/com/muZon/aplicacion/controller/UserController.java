@@ -1,9 +1,11 @@
 package com.muZon.aplicacion.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -14,6 +16,7 @@ import javax.validation.Valid;
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
 import com.muZon.aplicacion.entity.Address;
+import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.GrafanaMetrics;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.Role;
@@ -29,6 +32,8 @@ import com.muZon.aplicacion.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -63,7 +68,7 @@ public class UserController {
 	@Autowired
 	ProductRepository productRepository;
 
-	@Autowired 
+	@Autowired
 	CartRepository cartRepository;
 
 	@Autowired
@@ -111,26 +116,50 @@ public class UserController {
 	}
 
 	@GetMapping("/userForm")
-	public String userForm(Model model) throws Exception {		
+	public String userForm(Model model) throws Exception {
+		List<Product> productList = new ArrayList<>();
+		List<Cart> cartList = new ArrayList<>();
+
 		model.addAttribute("userForm", new User());
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
-		model.addAttribute("productList", productRepository.findAll());
-		model.addAttribute("cartList", cartRepository.findAll());
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
+		model.addAttribute("productForm", new Product());
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails)principal).getUsername());
+
+		Iterable<Product> pr = productRepository.findAll();
+		Iterable<Cart> cr = cartRepository.findAll();
+
+		for(Product product : pr){
+			if(product.getSellerId().getId() != (user.get().getId())){
+				productList.add(product);
+			}
+		}
+
+		for(Cart cart : cr){
+			if(cart.getSellerId().getId() != (user.get().getId())){
+				cartList.add(cart);
+			}
+		}
+
+		model.addAttribute("productList", productList);
+		model.addAttribute("cartList", cartList);
 
 		return "user-form/user-view";
 	}
 
 	@GetMapping("/loginCount")
-	public String loginCount(Model model) throws Exception {		
-		GrafanaMetrics metricsGraf= new GrafanaMetrics();
-        Date today = new Date();
-        metricsGraf.setSqlTimestamp(today);
+	public String loginCount(Model model) throws Exception {
+		GrafanaMetrics metricsGraf = new GrafanaMetrics();
+		Date today = new Date();
+		metricsGraf.setSqlTimestamp(today);
 		Integer numLogs = 1;
-        metricsGraf.setNumLogins(numLogs);
-        grafanaService.saveGrafanaMetrics(metricsGraf);
+		metricsGraf.setNumLogins(numLogs);
+		grafanaService.saveGrafanaMetrics(metricsGraf);
 
 		return "redirect:/userForm";
 	}
@@ -138,9 +167,9 @@ public class UserController {
 	@GetMapping("/selectAddress/{id}")
 	public String getShowAddressForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
 		User user = userService.getUserById(id);
-		
+
 		List<Address> addresses = addressRepository.findByUser(user);
-	
+
 		model.addAttribute("user", user);
 		model.addAttribute("addressList", addresses);
 		model.addAttribute("addressForm", new ChangeAddressForm(id));
@@ -307,7 +336,7 @@ public class UserController {
 	}
 
 	@PostMapping("/editUser/addAddress")
-	public ResponseEntity<?> postAddAddress(@Valid @RequestBody ChangeAddressForm form, Errors errors) {		
+	public ResponseEntity<?> postAddAddress(@Valid @RequestBody ChangeAddressForm form, Errors errors) {
 		try {
 			if (errors.hasErrors()) {
 				String result = errors.getAllErrors()
@@ -412,7 +441,7 @@ public class UserController {
 		if (data.split("[=]")[0].equals("ccate")) {
 			String category = data.split("[=]")[1];
 			model.addAttribute("categoryList", productRepository.findByCategory(category));
-			
+
 			return "user-form/productsPage";
 		} else {
 			String idP = data.split("[=]")[1];

@@ -58,6 +58,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Optional<User> getUserByUsername(String username) {
+		return repository.findByUsername(username);
+	}
+
+	@Override
 	public User createUser(User user) throws Exception {
 		if (checkUsernameAvailable(user)) {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

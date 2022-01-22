@@ -1,16 +1,12 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>MuZon</title>
 
-	<title>Muzon</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+	<!--JQUERY-->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
@@ -18,75 +14,94 @@
 		crossorigin="anonymous"></script>
 
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Los iconos tipo Solid de Fontawesome-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
 		integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
 
-	<script src="lib/js/bootstrap.min.js"></script>
+	<!-- Nuestro css-->
 	<link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
 
+	<!-- DATA TABLE -->
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+	<script src="lib/js/bootstrap.min.js"></script>
+
+	<link rel="icon" href="static/img/Muzon.png" type="image/x-icon">
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+		integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+		integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+		crossorigin="anonymous"></script>
 </head>
 
 <body>
-	<div th:with="disableFields=!${editMode} and ${#authorization.expression('hasRole(''ROLE_USER'')')}">
-		<div class="container px-5">
-			<div id="myTab" role="tablist">
-				<div class="d-flex justify-content-center container">
-					<form class="form container-fluid mx-3 px-3 py-3" role="form" autocomplete="off"
-						th:object="${productForm}" th:action="@{'/addProduct/'+ ${userId.id}}" method="post">
-						<div class="form-group row mb-3">
-							<div class="form-group">
+	<div id="alert" class="d-none alert alert-info" role="alert">
+		Image uploaded succesfully! Please fill in the data
+	</div>
+	<div class="d-flex justify-content-center container">
+		<div class="d-none container-fluid m-0 p-0" id="submit">
+			<tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+				<form
+					th:if="(${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})"
+					class="form container-fluid mx-3 px-3 py-3" role="form" autocomplete="off"
+					th:object="${productForm}" th:action="@{'/addProduct/'+ ${user.id}}" method="post">
+
+					<div class="container d-flex flex-column">
+						<div class="form-floating mb-2 mx-0 px-0">
+							<input class="form-control mx-0 px-0" id="floatingInput" type="text"
+								th:field="${productForm.name}" th:disabled="${disableFields}" required>
+							<label for="floatingInput"><b>Product Name</b></label>
+							<div class="alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+								Name
+								Error</div>
+						</div>
+
+						<div class="d-flex justify-content-between flex-nowrap">
+							<textarea class=" form-control" th:field="${productForm.description}"
+								th:disabled="${disableFields}" required placeholder="Description" rows="3"></textarea>
+							<div class="alert-danger" th:if="${#fields.hasErrors('description')}"
+								th:errors="*{description}">Name Error
+							</div>
+							<div class=" d-flex flex-column">
 								<div class="form-floating mb-1">
-									<input class="form-control" id="floatingInput" type="text"
-										th:field="${productForm.name}" th:disabled="${disableFields}" required>
-									<label for="floatingInput"><b>Product Name</b></label>
-									<div class="alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+									<input class="form-control" id="floatingInput" type="number"
+										th:field="${productForm.quantity}" th:disabled="${disableFields}" required>
+									<label for="floatingInput">Quantity</label>
+									<div class="alert-danger" th:if="${#fields.hasErrors('quantity')}"
+										th:errors="*{quantity}">
 										Name
 										Error</div>
 								</div>
-							</div>
-						</div>
 
-						<div class="container-fluid mb-3">
-							<div class="row justify-content-between">
-								<div class="col-5 d-flex">
-									<div class="form-floating mb-1 h-100 w-100">
-										<input class="form-control h-100" id="floatingInput" type="text"
-											th:field="${productForm.description}" th:disabled="${disableFields}"
-											required>
-										<label for="floatingInput"><em>Description</em></label>
-										<div class="alert-danger" th:if="${#fields.hasErrors('description')}"
-											th:errors="*{description}">Name Error
-										</div>
-									</div>
+								<div class="form-floating mb-1">
+									<input class="form-control" id="floatingInput" type="number"
+										th:field="${productForm.price}" th:disabled="${disableFields}" required>
+									<label for="floatingInput">Price</label>
+									<div class="alert-danger" th:if="${#fields.hasErrors('price')}"
+										th:errors="*{price}">
+										Name
+										Error</div>
 								</div>
-								<div class="col-7">
-									<div class="form-floating mb-1">
-										<input class="form-control" id="floatingInput" type="text"
-											th:field="${productForm.quantity}" th:disabled="${disableFields}" required>
-										<label for="floatingInput">Quantity</label>
-										<div class="alert-danger" th:if="${#fields.hasErrors('quantity')}"
-											th:errors="*{quantity}">Name
-											Error</div>
-									</div>
-									<div class="form-floating mb-1">
-										<input class="form-control" id="floatingInput" type="text"
-											th:field="${productForm.price}" th:disabled="${disableFields}" required>
-										<label for="floatingInput">Price</label>
-										<div class="alert-danger" th:if="${#fields.hasErrors('price')}"
-											th:errors="*{price}">Name
-											Error</div>
-									</div>
-								</div>
-							</div>
-						</div>
 
-						<div class="row justify-content-between">
-							<div class="col-4 form-group">
-								<div class="dropdown">
-									<button class="btn btn-default dropdown-toggle border border-dark" type="button"
-										data-toggle="dropdown">Category
-										</button>
+								<div class="dropdown mx-1">
+									<button id="select" class="btn btn-default dropdown-toggle border border-dark"
+										type="button" data-toggle="dropdown">Category
+									</button>
 									<div class="dropdown-menu">
 										<div onclick="category('clothes')">Clothes</div>
 										<div onclick="category('cups')">Cups</div>
@@ -98,39 +113,41 @@
 										<div onclick="category('medical')">Medical</div>
 										<div onclick="category('briefcases')">Briefcases</div>
 									</div>
-								</div>								
-							</div>
-
-							<div class="col-7 form-group d-flex">
-								<button type="submit" class="btn btn-outline-dark w-100 h-100">Save</button>
+								</div>
 							</div>
 						</div>
-					</form>
-					<form id="fileForm" enctype="multipart/form-data" class="mt-3">
-						<input type="file" name="file" id="file" required/><br /><br />
-						<input type="button" id="submit" value="Upload" onclick="postComment()" />
-					</form>
-				</div>
-			</div>
+						<div class="row container-fluid mt-3">
+							<button type="submit" class="col-10 btn btn-outline-dark w-100 h-100">Save</button>
+						</div>
+					</div>
+				</form>
+			</tr>
 		</div>
+		<form id="fileForm" enctype="multipart/form-data" class="mt-3">
+			<input type="file" name="file" id="file" required /><br /><br />
+			<input type="button" id="submit" value="Upload" onclick="postComment()" />
+		</form>
 	</div>
 </body>
 
 <script>
-	function category(category){
-		var params = {};
-        params["category"] = category;
-		console.log("dasd");
 
-        $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "/addProduct",
-        data: JSON.stringify(params),
-        dataType: 'text',
-        cache: false,
-        timeout: 600000,
-    });
+	function category(category) {
+		var params = {};
+		params["category"] = category;
+
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			url: "/addProduct",
+			data: JSON.stringify(params),
+			dataType: 'text',
+			cache: false,
+			timeout: 600000,
+			success: function (data, textStatus) {
+				$("#select").replaceWith("Category: " + category);
+			}
+		});
 	}
 
 	function postComment() {
@@ -142,7 +159,9 @@
 			contentType: false,
 			success: function (data, textStatus) {
 				//redirect when succeed
-				$("#fileForm").replaceWith(textStatus)
+				$("#alert").removeClass("d-none");
+				$("#submit").removeClass("d-none");
+				$("#fileForm").addClass("d-none");
 			}
 		});
 		e.preventDefault();
