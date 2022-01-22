@@ -24,6 +24,7 @@
 
     <script src="lib/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
+    <link rel="stylesheet" type="text/css" href="static/css/modalPassword.css" th:href="@{/css/modalPassword.css}">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
@@ -180,23 +181,20 @@
             <h6>Recommended Products</h6>
             <div class="list-group list-group-horizontal bg-white overflow-auto text-nowrap flex-row border-0 p-0">
                 <tr th:each="product: ${productList}">
-                    <a onclick="displayProduct()" class=" list-group-item list-group-item-action
-                    bg-transparent border-0 py-2 my-0">
-                        <img src="img/spanishFlag.png" class="py-0" alt="...">
+                    <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
+                        <img src="img/spanishFlag.png" class="p-1 w-50 w-md-75 w-lg-100" alt="...">
                     </a>
-                    <div class="d-none" id="idP" th:text="${product.id}"></div>
                 </tr>
             </div>
         </div>
 
-
         <div class="container-fluid mb-3 p-0">
-            <div class="d-flex justify-content-between flex-nowrap gap-3">
+            <div class="d-flex justify-content-between flex-nowrap flex-column flex-lg-row gap-3">
                 <div class="box border-0">
                     <h6 class="m-1">Most Sold</h6>
                     <div class="d-flex flex-wrap">
-                        <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                                alt="...">
+                        <a href="#" class=" text-decoration-none text-dark"><img src="img/englishFlag.png"
+                                class="p-1 w-50 w-md-75 w-lg-100" alt="...">
                             <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png"
                                     class="p-1" alt="...">
                     </div>
@@ -204,9 +202,9 @@
                 <div class="box border-0">
                     <h6 class="m-1">Newness</h6>
                     <div class="d-flex flex-wrap">
-                        <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                                alt="...">
-                            <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png"
+                        <a href="#" class="img-fluid text-decoration-none text-dark"><img src="img/englishFlag.png"
+                                class="p-1" alt="...">
+                            <a href="#" class="img-fluid text-decoration-none text-dark"><img src="img/englishFlag.png"
                                     class="p-1" alt="...">
                     </div>
                 </div>
@@ -238,8 +236,7 @@
 <script>
     function displayCarrousel(clicked) {
         var http = new XMLHttpRequest();
-        var idU = $("#idU").text();
-        var url = "/displayProducts/" + idU;
+        var url = "/displayProducts/";
 
         http.open('POST', url, true);
 
@@ -248,33 +245,12 @@
                 $("#cambios").removeClass("d-none");
                 $("#cambios").html(http.responseText);
                 $("#principal").addClass("d-none");
-                $("#back").removeClass("d-none");
                 $("#searchAndSell").addClass("d-none");
+                $("#back").removeClass("d-none");
             }
         }
 
         http.send("ccate=" + clicked);
-    }
-
-    function displayProduct() {
-        var http = new XMLHttpRequest();
-        var idU = $("#idU").text();
-        var idP = $("#idP").text();
-        var url = "/displayProducts/" + idU;
-
-        http.open('POST', url, true);
-
-        http.onreadystatechange = function () {//Call a function when the state changes.
-            if (http.status == 200) {
-                $("#cambios").removeClass("d-none");
-                $("#cambios").html(http.responseText);
-                $("#principal").addClass("d-none");
-                $("#back").removeClass("d-none");
-                $("#searchAndSell").addClass("d-none");
-            }
-        }
-
-        http.send("cp=" + idP);
     }
 
     var prevScrollpos = window.pageYOffset;

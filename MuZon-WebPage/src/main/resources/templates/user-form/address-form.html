@@ -45,14 +45,17 @@
                 </div>
             </div>
             <div class="container-fluid mt-4">
-                <div class="container d-flex flex-wrap justify-content-between">
+                <div class="container-fluid d-flex flex-wrap">
                     <tr th:each="addresses: ${addressList}">
-                        <div class="card my-2">
-                            <div class="card-header" th:text="${addresses.address}"></div>
+                        <div class="card my-2 mx-4">
+                            <h5 class="card-header text-capitalize" th:text="${addresses.address}"></h5>
                             <div class="card-body">
-                                <blockquote class="blockquote mb-0">
-                                    <footer class="blockquote-footer">Someone famous in <cite
-                                            title="Source Title">Source Title</cite></footer>
+                                <blockquote class="blockquote mb-0 d-flex flex-column">
+                                    <small><a th:if="${addresses.defaultAddress == 0}"
+                                            th:href="@{'/setDefault/'+ ${addresses.id}}">Set as
+                                            default</a></small>
+                                    <small><b><a class="text-muted" th:if="${addresses.defaultAddress == 0}"
+                                                th:href="@{'/delete/'+ ${addresses.id}}">Delete</a></small></b>
                                 </blockquote>
                             </div>
                         </div>

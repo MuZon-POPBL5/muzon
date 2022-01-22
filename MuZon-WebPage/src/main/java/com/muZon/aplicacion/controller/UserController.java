@@ -52,6 +52,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
 	static String category;
+	final static int SET_DEFAULT = 1;
 
 	@Autowired
 	UserService userService;
@@ -129,19 +130,19 @@ public class UserController {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		Optional<User> user = userService.getUserByUsername(((UserDetails)principal).getUsername());
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
 		Iterable<Product> pr = productRepository.findAll();
 		Iterable<Cart> cr = cartRepository.findAll();
 
-		for(Product product : pr){
-			if(product.getSellerId().getId() != (user.get().getId())){
+		for (Product product : pr) {
+			if (product.getSellerId().getId() != (user.get().getId())) {
 				productList.add(product);
 			}
 		}
 
-		for(Cart cart : cr){
-			if(cart.getSellerId().getId() != (user.get().getId())){
+		for (Cart cart : cr) {
+			if (cart.getSellerId().getId() == (user.get().getId())) {
 				cartList.add(cart);
 			}
 		}
@@ -345,11 +346,29 @@ public class UserController {
 
 				throw new Exception(result);
 			}
-			addressService.changeAddress(form);
+			addressService.addAddress(form);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		return ResponseEntity.ok("Success");
+	}
+
+	@GetMapping("/setDefault/{id}")
+	public String setDefault(Model model, @PathVariable(name = "id") Long id) {
+		Optional<Address> address = addressRepository.findById(id);
+
+		address.get().setDefaultAddress(SET_DEFAULT);
+		addressService.saveChanges(address.get(), id);
+
+		return "redirect:/userForm";
+	}
+
+	@GetMapping("/delete/{id}")
+	public String delete(Model model, @PathVariable(name = "id") Long id) {
+
+		addressService.delete(id);
+
+		return "redirect:/userForm";
 	}
 
 	@GetMapping("/displayDeleteForm/{id}")
@@ -430,10 +449,31 @@ public class UserController {
 		return ResponseEntity.ok("Success");
 	}
 
-	@PostMapping("/displayProducts/{id}")
-	public String displayCarrousel(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
+	@GetMapping("/displayProducts/{id}")
+	public String displayFromCarrousel(Model model, @PathVariable(name = "id") Long id)
 			throws Exception {
-		User user = userService.getUserById(id);
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
+
+		model.addAttribute("user", user);
+		model.addAttribute("editMode", "true");
+
+		
+		Product productToDisplay = productRepository.findById(id).orElseThrow();
+		model.addAttribute("product", productToDisplay);
+
+		return "user-form/buyProduct";	
+	}
+
+	@PostMapping("/displayProducts")
+	public String displayCarrousel(Model model, @RequestBody String data)
+			throws Exception {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
 		model.addAttribute("user", user);
 		model.addAttribute("editMode", "true");
@@ -457,15 +497,11 @@ public class UserController {
 			throws Exception {
 		Product productToSave = productRepository.findById(id).orElseThrow();
 
-		String userData = data.split("[,]")[0];
-		String userId = userData.split("[=]")[1];
-		String quantityData = data.split("[,]")[1];
-		String quantity = quantityData.split("[=]")[1];
+		String quantity = data.split("[=]")[1];
 
-		User user = userService.getUserById(Long.valueOf(userId));
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		// model.addAttribute("user", userToEdit);
-		model.addAttribute("editMode", "true");
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
 		userService.addToCart(productToSave, Integer.valueOf(quantity), user);
 
@@ -477,15 +513,11 @@ public class UserController {
 			throws Exception {
 		Product productToSave = productRepository.findById(id).orElseThrow();
 
-		String userData = data.split("[,]")[0];
-		String userId = userData.split("[=]")[1];
-		String quantityData = data.split("[,]")[1];
-		String quantity = quantityData.split("[=]")[1];
+		String quantity = data.split("[=]")[1];
 
-		User user = userService.getUserById(Long.valueOf(userId));
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		// model.addAttribute("user", userToEdit);
-		model.addAttribute("editMode", "true");
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
 		userService.addBuyNow(productToSave, Integer.valueOf(quantity), user);
 

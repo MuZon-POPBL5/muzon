@@ -19,15 +19,8 @@ public class AddressServiceImpl implements AddressService{
     @Autowired
     UserService userService;
 
-
     @Override
-    public List<Address> getAddressByUserId(User user) {
-        //return repository.findAllById(user);
-        return null;
-    }
-
-    @Override
-	public Address changeAddress(ChangeAddressForm form) throws Exception {
+	public Address addAddress(ChangeAddressForm form) throws Exception {
 		User user = userService.getUserById(form.getId());
 		Address address = new Address(); 
 
@@ -36,5 +29,17 @@ public class AddressServiceImpl implements AddressService{
 		// user.setAddress("c " + form.getNewAddress() + form.getNewCity() + ", " +
 		// form.getNewZipCode() + ", " + form.getNewCountry());
 		return repository.save(address);
-	}    
+	}
+
+    @Override
+    public Address saveChanges(Address address, Long id) {
+        repository.deleteById(id);
+
+        return repository.save(address);
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }    
 }

@@ -182,25 +182,25 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Cart addToCart(Product productToSave, Integer quantity, User user) {
+	public Cart addToCart(Product productToSave, Integer quantity, Optional<User> user) {
 		Cart cart = new Cart();
 		
 		cart.setProductId(productToSave);
 		cart.setQuantity(quantity);
 		cart.setPrice(quantity*productToSave.getPrice());
-		cart.setSellerId(user);
+		cart.setSellerId(user.get());
 
 		return repositoryCart.save(cart);
 	}
 
 	@Override
-	public Buy addBuyNow(Product productToSave, Integer quantity, User user) {
+	public Buy addBuyNow(Product productToSave, Integer quantity, Optional<User> user) {
 		Buy buy = new Buy();
 
 		buy.setProductId(productToSave);
 		buy.setQuantity(quantity);
 		buy.setPrice(quantity*productToSave.getPrice());
-		buy.setSellerId(user);
+		buy.setSellerId(user.get());
 
 		return repositoryBuy.save(buy);
 	}

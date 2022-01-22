@@ -31,9 +31,9 @@ public interface UserService {
 
 	public User changeEmail(User user, String newEmail);
 
-    public Cart addToCart(Product productToSave, Integer quantity, User user);
+    public Cart addToCart(Product productToSave, Integer quantity, Optional<User> user);
 
-	public Buy addBuyNow(Product productToSave, Integer quantity, User user);
+	public Buy addBuyNow(Product productToSave, Integer quantity, Optional<User> user);
 
     public Optional<User> getUserByUsername(String username);
 }

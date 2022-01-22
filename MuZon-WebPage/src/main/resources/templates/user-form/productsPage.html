@@ -26,7 +26,7 @@
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-  <title>Products</title>
+  <title>Muzon</title>
 </head>
 
 <body>
@@ -35,15 +35,11 @@
       <!--<td th:text="${product.id}"></td>     PASAR AQUI ID DE USER PARA PODER PASAR EN EL SCRIPT-->
       <div class="col">
         <div class="card">
-          <a onclick="displayProduct()" class="text-decoration-none">
-            <div id="idP" th:text="${product.id}"></div>
+          <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
             <img src="" class="card-img-top text-dark" alt="Product image">
             <div class="card-body">
               <h5 class="card-title text-dark" th:text="${product.name}"></h5>
-              <p class="card-text text-dark" th:text="${product.description}">This is a longer card with supporting text
-                below as
-                a natural lead-in to additional
-                content. This content is a little bit longer.</p>
+              <p class="card-text text-dark" th:text="${product.description}"></p>
             </div>
           </a>
         </div>

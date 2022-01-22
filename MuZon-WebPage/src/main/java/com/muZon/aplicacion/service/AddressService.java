@@ -8,7 +8,9 @@ import com.muZon.aplicacion.entity.User;
 
 public interface AddressService {
 
-    List<Address> getAddressByUserId(User user);
+    public Address addAddress(ChangeAddressForm form) throws Exception;
 
-    public Address changeAddress(ChangeAddressForm form) throws Exception;
+    public  Address saveChanges(Address address, Long id);
+
+    public void delete(Long id);
 }
