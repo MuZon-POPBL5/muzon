@@ -73,7 +73,7 @@ public class UserController {
 		}
 
 		for (Cart cart : cr) {
-			if (cart.getSellerId().getId() == (user.get().getId())) {
+			if (cart.getBoughtId().getId() == (user.get().getId())) {
 				cartList.add(cart);
 			}
 		}

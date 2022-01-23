@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService{
 		cart.setProductId(productToSave);
 		cart.setQuantity(quantity);
 		cart.setPrice(quantity*productToSave.getPrice());
-		cart.setSellerId(user.get());
+		cart.setBoughtId(user.get());
 
 		return repositoryCart.save(cart);
 	}
@@ -75,5 +75,9 @@ public class ProductServiceImpl implements ProductService{
 
 		return repositoryBuy.save(buy);
 	}
-    
+
+	@Override
+	public void deleteCart(User user) {
+		repositoryCart.deleteByBoughtId(user);
+	}
 }
