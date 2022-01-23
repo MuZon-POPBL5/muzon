@@ -140,6 +140,8 @@ public class ProductController {
 	public String displayCarrousel(Model model, @RequestBody String data)
 			throws Exception {
 
+		List<Product> categoryList = new ArrayList<>();
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
@@ -149,7 +151,16 @@ public class ProductController {
 
 		if (data.split("[=]")[0].equals("ccate")) {
 			String category = data.split("[=]")[1];
-			model.addAttribute("categoryList", productRepository.findByCategory(category));
+
+			Iterable<Product> list = productRepository.findByCategory(category);
+
+			for(Product product:list){
+				if(product.getSellerId().getId() != user.get().getId()){
+					categoryList.add(product);
+				}
+			}
+
+			model.addAttribute("categoryList", categoryList);
 
 			return "user-form/productsPage";
 		} else {

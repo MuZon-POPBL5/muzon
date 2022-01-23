@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SettingsController {
 
     final static int SET_DEFAULT = 1;
+	final static int SET_NOT_DEFAULT = 0;
     
 	@Autowired
 	UserService userService;
@@ -122,6 +123,14 @@ public class SettingsController {
 	@GetMapping("/setDefault/{id}")
 	public String setDefault(Model model, @PathVariable(name = "id") Long id) {
 		Optional<Address> address = addressRepository.findById(id);
+		Iterable<Address> addressList = addressRepository.findAll();
+
+		for(Address addresses : addressList){
+			if(addresses.getId() != address.get().getId()){
+				addresses.setDefaultAddress(SET_NOT_DEFAULT);
+				addressService.saveChanges(addresses, addresses.getId());
+			}
+		}
 
 		address.get().setDefaultAddress(SET_DEFAULT);
 		addressService.saveChanges(address.get(), id);
