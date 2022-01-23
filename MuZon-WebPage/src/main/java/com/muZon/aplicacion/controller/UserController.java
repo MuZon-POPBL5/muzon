@@ -1,9 +1,12 @@
 package com.muZon.aplicacion.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -13,19 +16,25 @@ import javax.validation.Valid;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Address;
+import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.GrafanaMetrics;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.Role;
 import com.muZon.aplicacion.entity.User;
 import com.muZon.aplicacion.exception.CustomeFieldValidationException;
+import com.muZon.aplicacion.repository.AddressRepository;
 import com.muZon.aplicacion.repository.CartRepository;
 import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.RoleRepository;
+import com.muZon.aplicacion.service.AddressService;
 import com.muZon.aplicacion.service.GrafanaService;
 import com.muZon.aplicacion.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -44,12 +53,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
 	static String category;
+	final static int SET_DEFAULT = 1;
 
 	@Autowired
 	UserService userService;
 
 	@Autowired
 	GrafanaService grafanaService;
+
+	@Autowired
+	AddressService addressService;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -59,6 +72,9 @@ public class UserController {
 
 	@Autowired
 	CartRepository cartRepository;
+
+	@Autowired
+	AddressRepository addressRepository;
 
 	@GetMapping({ "/", "/login" })
 	public String index() {
@@ -103,29 +119,61 @@ public class UserController {
 
 	@GetMapping("/userForm")
 	public String userForm(Model model) throws Exception {
-		GrafanaMetrics metricsGraf= new GrafanaMetrics();
-        Date today = new Date();
-        metricsGraf.setSqlTimestamp(today);
-        Integer numLogs = metricsGraf.getNumLogins();
-        metricsGraf.setNumLogins(++numLogs);
-        grafanaService.saveGrafanaMetrics(metricsGraf);
-		
+		List<Product> productList = new ArrayList<>();
+		List<Cart> cartList = new ArrayList<>();
+
 		model.addAttribute("userForm", new User());
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
-		model.addAttribute("productList", productRepository.findAll());
-		model.addAttribute("cartList", cartRepository.findAll());
 		model.addAttribute("listTab", "active");
 		model.addAttribute("userTab", "active");
+		model.addAttribute("productForm", new Product());
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
+
+		Iterable<Product> pr = productRepository.findAll();
+		Iterable<Cart> cr = cartRepository.findAll();
+
+		for (Product product : pr) {
+			if (product.getSellerId().getId() != (user.get().getId())) {
+				productList.add(product);
+			}
+		}
+
+		for (Cart cart : cr) {
+			if (cart.getSellerId().getId() == (user.get().getId())) {
+				cartList.add(cart);
+			}
+		}
+
+		model.addAttribute("productList", productList);
+		model.addAttribute("cartList", cartList);
 
 		return "user-form/user-view";
+	}
+
+	@GetMapping("/loginCount")
+	public String loginCount(Model model) throws Exception {
+		GrafanaMetrics metricsGraf = new GrafanaMetrics();
+		Date today = new Date();
+		metricsGraf.setSqlTimestamp(today);
+		Integer numLogs = 1;
+		metricsGraf.setNumLogins(numLogs);
+		grafanaService.saveGrafanaMetrics(metricsGraf);
+
+		return "redirect:/userForm";
 	}
 
 	@GetMapping("/selectAddress/{id}")
 	public String getShowAddressForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
 		User user = userService.getUserById(id);
 
-		model.addAttribute("userAddress", user);
+		List<Address> addresses = addressRepository.findByUser(user);
+
+		model.addAttribute("user", user);
+		model.addAttribute("addressList", addresses);
 		model.addAttribute("addressForm", new ChangeAddressForm(id));
 		model.addAttribute("editMode", "true");
 
@@ -299,11 +347,29 @@ public class UserController {
 
 				throw new Exception(result);
 			}
-			userService.changeAddress(form);
+			addressService.addAddress(form);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		return ResponseEntity.ok("Success");
+	}
+
+	@GetMapping("/setDefault/{id}")
+	public String setDefault(Model model, @PathVariable(name = "id") Long id) {
+		Optional<Address> address = addressRepository.findById(id);
+
+		address.get().setDefaultAddress(SET_DEFAULT);
+		addressService.saveChanges(address.get(), id);
+
+		return "redirect:/userForm";
+	}
+
+	@GetMapping("/delete/{id}")
+	public String delete(Model model, @PathVariable(name = "id") Long id) {
+
+		addressService.delete(id);
+
+		return "redirect:/userForm";
 	}
 
 	@GetMapping("/displayDeleteForm/{id}")
@@ -369,13 +435,11 @@ public class UserController {
 	public ResponseEntity<?> singleFileUpload(@RequestParam() MultipartFile file,
 			RedirectAttributes redirectAttributes) {
 		try {
-			byte[] bytes = file.getBytes();
-			/*
-			 * Path path = Paths.get(file.getOriginalFilename());
-			 * Files.write(path, bytes);
-			 */
+			byte[] fileContent = file.getBytes();
 
-			userService.save(bytes);
+			String encodedString = Base64.getEncoder().encodeToString(fileContent);
+
+			userService.save(encodedString);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -384,10 +448,30 @@ public class UserController {
 		return ResponseEntity.ok("Success");
 	}
 
-	@PostMapping("/displayProducts/{id}")
-	public String displayCarrousel(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
+	@GetMapping("/displayProducts/{id}")
+	public String displayFromCarrousel(Model model, @PathVariable(name = "id") Long id)
 			throws Exception {
-		User user = userService.getUserById(id);
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
+
+		model.addAttribute("user", user);
+		model.addAttribute("editMode", "true");
+
+		Product productToDisplay = productRepository.findById(id).orElseThrow();
+		model.addAttribute("product", productToDisplay);
+
+		return "user-form/buyProduct";
+	}
+
+	@PostMapping("/displayProducts")
+	public String displayCarrousel(Model model, @RequestBody String data)
+			throws Exception {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
 		model.addAttribute("user", user);
 		model.addAttribute("editMode", "true");
@@ -395,7 +479,7 @@ public class UserController {
 		if (data.split("[=]")[0].equals("ccate")) {
 			String category = data.split("[=]")[1];
 			model.addAttribute("categoryList", productRepository.findByCategory(category));
-			
+
 			return "user-form/productsPage";
 		} else {
 			String idP = data.split("[=]")[1];
@@ -411,15 +495,11 @@ public class UserController {
 			throws Exception {
 		Product productToSave = productRepository.findById(id).orElseThrow();
 
-		String userData = data.split("[,]")[0];
-		String userId = userData.split("[=]")[1];
-		String quantityData = data.split("[,]")[1];
-		String quantity = quantityData.split("[=]")[1];
+		String quantity = data.split("[=]")[1];
 
-		User user = userService.getUserById(Long.valueOf(userId));
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		// model.addAttribute("user", userToEdit);
-		model.addAttribute("editMode", "true");
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
 		userService.addToCart(productToSave, Integer.valueOf(quantity), user);
 
@@ -427,22 +507,41 @@ public class UserController {
 	}
 
 	@PostMapping("/buyNow/{id}")
-	public String buyNow(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
+	public ResponseEntity<String> buyNow(Model model, @PathVariable(name = "id") Long id, @RequestBody String data)
 			throws Exception {
 		Product productToSave = productRepository.findById(id).orElseThrow();
 
-		String userData = data.split("[,]")[0];
-		String userId = userData.split("[=]")[1];
-		String quantityData = data.split("[,]")[1];
-		String quantity = quantityData.split("[=]")[1];
+		String quantity = data.split("[=]")[1];
 
-		User user = userService.getUserById(Long.valueOf(userId));
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		// model.addAttribute("user", userToEdit);
-		model.addAttribute("editMode", "true");
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
 		userService.addBuyNow(productToSave, Integer.valueOf(quantity), user);
 
-		return "index";
+		return ResponseEntity.ok("Success");
+	}
+
+	@GetMapping("/buyAll")
+	public String buyAll(Model model) throws Exception {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
+
+		List<Cart> cartList = new ArrayList<>();		
+
+		Iterable<Cart> cr = cartRepository.findAll();
+
+		for (Cart cart : cr) {
+			if (cart.getSellerId().getId() == (user.get().getId())) {
+				cartList.add(cart);
+			}
+		}
+
+		for(Cart cart : cartList){
+			userService.addBuyNow(cart.getProductId(), cart.getQuantity(), user);
+		}
+
+		return "redirect:/userForm";
 	}
 }
