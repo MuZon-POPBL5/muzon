@@ -135,3 +135,4 @@ public class Buy implements Serializable {
         ", quantity=" + quantity + ", price=" + price + "]";
     }
 }
+

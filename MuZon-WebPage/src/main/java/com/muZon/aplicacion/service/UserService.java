@@ -37,3 +37,4 @@ public interface UserService {
 
     public Optional<User> getUserByUsername(String username);
 }
+

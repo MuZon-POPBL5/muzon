@@ -2,10 +2,8 @@
 <html>
 
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" type="text/css" href="static/css/modalPassword.css" th:href="@{/css/modalPassword.css}">
+	<title>Muzon</title>
+	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
 </head>
 
 <body>
@@ -15,7 +13,7 @@
 				<tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
 					<span
 						th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
-						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4" href="#"
+						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4 text-dark" href="#"
 							th:href="@{'/accountSettings/'+ ${user.id}}">My Account</a>
 						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark"
 							href="#" th:href="@{'/selectAddress/'+ ${user.id}}">Choose your address</a>
@@ -24,27 +22,29 @@
 						<div id="myModal" class="modal">
 							<div class="modal-content">
 								<span class="close">&times;</span>
-								<p class="mt-1">Protecting your privacy and the security of your data has always been a
-									priority for <em>Muzon.</em><b> If you delete your account, your profile will be
+					<p class="mt-1">Protecting your privacy and the security of your data has always been a
+						priority for <em>Muzon.</em><b> If you delete your account, your profile will be
 										permanently deleted and there would not be any option to restore the
 										account.</b></p>
-								<form class="form container-fluid mx-3 px-3 py-3" role="form" autocomplete="off"
-									th:action="@{'/deleteUser/'+ ${user.id}}" method="post">
-									<button type="submit" class="btn btn-warning">Confirm Account Closure</button>
-								</form>
-							</div>
-						</div>
-					</span>
-				</tr>
-			</tbody>
-		</table>
-		<div class="alert alert-danger text-center" th:if="${listErrorMessage}" th:text="${listErrorMessage}">Error
-			MEssage
-		</div>
+					<form class="form container-fluid mx-3 px-3 py-3" role="form" autocomplete="off"
+						th:action="@{'/deleteUser/'+ ${user.id}}" method="post">
+						<button type="submit" class="btn btn-warning">Confirm Account Closure</button>
+					</form>
+	</div>
+	</div>
+	</span>
+	</tr>
+	</tbody>
+	</table>
+	<div class="alert alert-danger text-center" th:if="${listErrorMessage}" th:text="${listErrorMessage}">Error
+		MEssage
+	</div>
 	</div>
 
-	<script>
-		// Get the modal
+</body>
+
+<script>
+	// Get the modal
 		var modal = document.getElementById("myModal");
 
 		// Get the button that opens the modal
@@ -70,8 +70,7 @@
 				modal.style.display = "none";
 			}
 		}
-	</script>
+</script>
 
-</body>
 
 </html>

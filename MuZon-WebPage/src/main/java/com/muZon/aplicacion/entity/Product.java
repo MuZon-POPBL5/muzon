@@ -188,3 +188,4 @@ public class Product implements Serializable {
                 + ", sellerId=" + sellerId + ", category=" + category + "]";
     }
 }
+

@@ -13,3 +13,4 @@ public interface AddressRepository extends CrudRepository<Address, Long>{
 
     public List<Address> findByUser(User user);
 }
+
