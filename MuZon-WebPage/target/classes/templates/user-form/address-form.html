@@ -2,12 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Muzon</title>
-	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
+    <title>Muzon</title>
+
+    <!--JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <!--BOOTSTRAP-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!--JavaScript Bundle with Popper-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <!--OUR CSS-->
+    <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
 </head>
 
 <body>
-     <div class="container px-5 bg-#d3d5d8 rounded">
+    <div class="container px-5 bg-#d3d5d8 rounded">
         <div id="myTab" role="tablist">
             <div class="d-flex pt-2">
                 <div id="back" class="pt-2 px-1 mr-5">
@@ -22,7 +37,7 @@
             <div class="mt-4">
                 <div class="d-flex flex-wrap">
                     <tr th:each="addresses: ${addressList}">
-                        <div class="card my-2 ml-1">
+                        <div class="card my-2 ml-1 mr-5">
                             <h5 class="card-header text-capitalize" th:text="${addresses.address}"></h5>
                             <div class="card-body">
                                 <blockquote class="blockquote mb-0 d-flex flex-column">
@@ -43,4 +58,3 @@
 </body>
 
 </html>
-
