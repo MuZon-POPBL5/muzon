@@ -17,22 +17,22 @@
     </div>
 
     <div class="container text-center mb-3">
-        <img class="text-center img-fluid w-25" alt="muzon logo" th:src="@{/img/MuZon.png}" />
+        <img class="text-center img-fluid w-25" src="static/img/Muzon.png" th:src="@{/img/Muzon.png}" />
     </div>
-    <div class="container text-center lead mb-3">SIGN IN TO CONTINUE</div>
+    <div class="container text-center lead mb-3">LOG IN TO CONTINUE</div>
     <div class="d-flex justify-content-center container">
         <form th:action="@{/login}" method="post">
             <div class="form-group mb-3" id="user-group">
-                <input type="text" class="form-control" placeholder="Username" name="username" />
+                <input type="text" class="form-control" placeholder="Nombre de usuario" name="username" />
             </div>
             <div class="form-group mb-3" id="contrasena-group">
-                <input type="password" class="form-control" placeholder="Password" name="password" />
+                <input type="password" class="form-control" placeholder="Contrasena" name="password" />
             </div>
-            <button type="submit" class="container btn btn-primary">
-                <em class="fas fa-sign-in-alt"></em> LOG IN
-            </button>
+            <button type="submit" class="container btn btn-dark-teal"><i
+                    class="fas fa-sign-in-alt"></i>LOG IN</button>
         </form>
     </div>
-    <p class="text-center">New to MuZon? <a href="#" th:href="@{/signup}">Sign up</a></p>
+    <p class="text-center">New to Muzon? <a href="#" th:href="@{/signup}">Register</a></p>
 </body>
 </html>
+
