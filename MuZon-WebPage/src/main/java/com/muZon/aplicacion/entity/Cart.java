@@ -33,8 +33,8 @@ public class Cart implements Serializable {
     private int quantity;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sellerId", referencedColumnName = "id")
-    private User sellerId;
+    @JoinColumn(name = "boughtId", referencedColumnName = "id")
+    private User boughtId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId", referencedColumnName = "id")
@@ -64,12 +64,12 @@ public class Cart implements Serializable {
         this.price = price;
     }
 
-    public User getSellerId() {
-        return sellerId;
+    public User getBoughtId() {
+        return boughtId;
     }
 
-    public void setSellerId(User sellerId) {
-        this.sellerId = sellerId;
+    public void setBoughtId(User boughtId) {
+        this.boughtId = boughtId;
     }
 
     public Product getProductId() {
@@ -87,7 +87,7 @@ public class Cart implements Serializable {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((quantity == 0) ? 0 : quantity);
         result = prime * result + ((price == 0) ? 0 : Math.round(price));
-        result = prime * result + ((sellerId == null) ? 0 : sellerId.hashCode());
+        result = prime * result + ((boughtId == null) ? 0 : boughtId.hashCode());
         result = prime * result + ((productId == null) ? 0 : productId.hashCode());
         return result;
     }
@@ -116,10 +116,10 @@ public class Cart implements Serializable {
                 return false;
         } else if (price != (other.price))
             return false;
-        if (sellerId == null) {
-            if (other.sellerId != null)
+        if (boughtId == null) {
+            if (other.boughtId != null)
                 return false;
-        } else if (!sellerId.equals(other.sellerId))
+        } else if (!boughtId.equals(other.boughtId))
             return false;
         if (productId == null) {
             if (other.productId != null)
@@ -131,7 +131,7 @@ public class Cart implements Serializable {
 
     @Override
     public String toString() {
-        return "Cart [id=" + id + ", sellerId=" + sellerId + ", productId=" + productId + 
+        return "Cart [id=" + id + ", boughtId=" + boughtId + ", productId=" + productId + 
         ", quantity=" + quantity + ", price=" + price + "]";
     }
 }

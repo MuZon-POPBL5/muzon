@@ -215,7 +215,7 @@ public class ProductController {
 		Iterable<Cart> cr = cartRepository.findAll();
 
 		for (Cart cart : cr) {
-			if (cart.getSellerId().getId() == (user.get().getId())) {
+			if (cart.getBoughtId().getId() == (user.get().getId())) {
 				cartList.add(cart);
 			}
 		}
@@ -223,6 +223,8 @@ public class ProductController {
 		for(Cart cart : cartList){
 			productService.addBuyNow(cart.getProductId(), cart.getQuantity(), user);
 		}
+
+		productService.deleteCart(user.get());
 
 		return "redirect:/userForm";
 	}
