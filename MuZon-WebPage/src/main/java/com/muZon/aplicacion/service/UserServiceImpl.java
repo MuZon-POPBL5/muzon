@@ -4,10 +4,12 @@ import java.util.Optional;
 
 import com.muZon.aplicacion.dto.ChangeAddressForm;
 import com.muZon.aplicacion.dto.ChangePasswordForm;
+import com.muZon.aplicacion.entity.Address;
 import com.muZon.aplicacion.entity.Buy;
 import com.muZon.aplicacion.entity.Cart;
 import com.muZon.aplicacion.entity.Product;
 import com.muZon.aplicacion.entity.User;
+import com.muZon.aplicacion.repository.AddressRepository;
 import com.muZon.aplicacion.repository.BuyRepository;
 import com.muZon.aplicacion.repository.CartRepository;
 import com.muZon.aplicacion.repository.ProductRepository;
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-	byte[] imgSrc;
+	String imgSrc;
 
 	@Autowired
 	UserRepository repository;
@@ -35,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	BuyRepository repositoryBuy;
+
+	@Autowired
+	AddressRepository repositoryAddress;
 
 	@Override
 	public Iterable<User> getAllUsers() {
@@ -53,10 +58,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Optional<User> getUserByUsername(String username) {
+		return repository.findByUsername(username);
+	}
+
+	@Override
 	public User createUser(User user) throws Exception {
 		if (checkUsernameAvailable(user)) {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			user = repository.save(user);
+			Address address = new Address();
+
+			address.setUser(user);
+			address.setAddress("Default");
+			repositoryAddress.save(address);
 		}
 		return user;
 	}
@@ -124,16 +139,6 @@ public class UserServiceImpl implements UserService {
 		return repository.save(user);
 	}
 
-	@Override
-	public User changeAddress(ChangeAddressForm form) throws Exception {
-		User user = getUserById(form.getId());
-
-		user.setAddress(form.getNewAddress());
-		// user.setAddress("c " + form.getNewAddress() + form.getNewCity() + ", " +
-		// form.getNewZipCode() + ", " + form.getNewCountry());
-		return repository.save(user);
-	}
-
 	private boolean isLoggedUserADMIN() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails loggedUser = null;
@@ -155,7 +160,6 @@ public class UserServiceImpl implements UserService {
 		newProduct.setDescription(product.getDescription());
 		newProduct.setPrice(product.getPrice());
 		newProduct.setImgSrc(this.imgSrc);
-		//imgSrc = new byte[];
 		newProduct.setQuantity(product.getQuantity());
 		newProduct.setCategory(category);
 		Optional<User> sellerData = repository.findById(seller.getId());
@@ -165,7 +169,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void save(byte[] bytes) {
+	public void save(String bytes) {
 		this.imgSrc = bytes;
 	}
 
@@ -177,26 +181,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Cart addToCart(Product productToSave, Integer quantity, User user) {
+	public Cart addToCart(Product productToSave, Integer quantity, Optional<User> user) {
 		Cart cart = new Cart();
 		
 		cart.setProductId(productToSave);
 		cart.setQuantity(quantity);
 		cart.setPrice(quantity*productToSave.getPrice());
-		cart.setSellerId(user);
+		cart.setSellerId(user.get());
 
 		return repositoryCart.save(cart);
 	}
 
 	@Override
-	public Buy addBuyNow(Product productToSave, Integer quantity, User user) {
+	public Buy addBuyNow(Product productToSave, Integer quantity, Optional<User> user) {
 		Buy buy = new Buy();
 
 		buy.setProductId(productToSave);
 		buy.setQuantity(quantity);
 		buy.setPrice(quantity*productToSave.getPrice());
-		buy.setSellerId(user);
+		buy.setBoughtId(user.get());
 
 		return repositoryBuy.save(buy);
 	}
 }
+

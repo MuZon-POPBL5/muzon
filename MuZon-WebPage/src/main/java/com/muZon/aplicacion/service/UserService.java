@@ -1,7 +1,8 @@
 package com.muZon.aplicacion.service;
 
 
-import com.muZon.aplicacion.dto.ChangeAddressForm;
+import java.util.Optional;
+
 import com.muZon.aplicacion.dto.ChangePasswordForm;
 import com.muZon.aplicacion.entity.Buy;
 import com.muZon.aplicacion.entity.Cart;
@@ -24,15 +25,16 @@ public interface UserService {
 
 	public User changePasswordById(Long id, String newPassword, String confirmPassowrd) throws Exception;
 
-	public User changeAddress(ChangeAddressForm form) throws Exception;
-
 	public Product addProduct(User seller, Product product, String category) throws Exception;
 
-	public void save(byte[] bytes);
+	public void save(String bytes);
 
 	public User changeEmail(User user, String newEmail);
 
-    public Cart addToCart(Product productToSave, Integer quantity, User user);
+    public Cart addToCart(Product productToSave, Integer quantity, Optional<User> user);
 
-	public Buy addBuyNow(Product productToSave, Integer quantity, User user);
+	public Buy addBuyNow(Product productToSave, Integer quantity, Optional<User> user);
+
+    public Optional<User> getUserByUsername(String username);
 }
+
