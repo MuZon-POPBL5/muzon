@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Muzon</title>
+	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
+</head>
+
+<body>
+  <div class="row d-flex g-5 mx-4 mt-1 mb-5 align-items-center justify-content-between">
+    <tr th:each="product: ${categoryList}">
+      <!--<td th:text="${product.id}"></td>     PASAR AQUI ID DE USER PARA PODER PASAR EN EL SCRIPT-->
+      <div class="col">
+        <div class="card">
+          <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
+            <img src="" class="card-img-top text-dark" alt="Product image">
+            <div class="card-body">
+              <h5 class="card-title text-dark" th:text="${product.name}"></h5>
+              <p class="card-text text-dark" th:text="${product.description}"></p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </tr>
+  </div>
+
+  <div class="d-none py-3 footer fixed-bottom text-end" id="backtotop">
+    <span class="fa-stack mx-2 fa-lg">
+      <a href="#">
+        <img src=https://cdn.jsdelivr.net/npm/bootstrap-icons/icons/arrow-up-circle-fill.svg width="32" height="32"
+          alt="">
+      </a>
+    </span>
+  </div>
+</body>
+
+<script>
+  function displayProduct() {
+    var http = new XMLHttpRequest();
+    var id = 2;
+
+    var url = "/displayProducts/" + id;
+
+    
+
+    console.log(idP);
+
+    http.open('POST', url, true);
+
+    http.onreadystatechange = function () {//Call a function when the state changes.
+      if (http.status == 200) {
+        $("#cambios").removeClass("d-none");
+        $("#cambios").html(http.responseText);
+        $("#principal").addClass("d-none");
+        $("#back").removeClass("d-none");
+        $("#searchAndSell").addClass("d-none");
+      }
+    }
+
+    http.send("cp=" + idP);
+  }
+
+  var prevScrollpos = window.pageYOffset;
+  var first = 0;
+  window.onscroll = function () {
+    var currentScrollPos = window.pageYOffset;
+
+    console.log(currentScrollPos);
+    if (currentScrollPos == 0) {
+      console.log("sdad");
+      $("#backtotop").addClass("d-none");
+      first = 0;
+
+    } else if (currentScrollPos > 20) {
+      $("#backtotop").removeClass("d-none");
+      console.log(first);
+      if (first == 0) {
+        $('#backtotop').fadeTo(0, 0);
+        first = 1;
+        $('#backtotop').fadeTo(1000, 1);
+      }
+    }
+    prevScrollpos = currentScrollPos;
+  }
+</script>
+</html>
