@@ -29,6 +29,7 @@ import com.muZon.aplicacion.repository.ProductRepository;
 import com.muZon.aplicacion.repository.RoleRepository;
 import com.muZon.aplicacion.service.AddressService;
 import com.muZon.aplicacion.service.GrafanaService;
+import com.muZon.aplicacion.service.ProductService;
 import com.muZon.aplicacion.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,9 @@ public class UserController {
 
 	@Autowired
 	AddressService addressService;
+
+	@Autowired
+	ProductService productService;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -411,7 +415,7 @@ public class UserController {
 		User seller = userService.getUserById(id);
 
 		try {
-			userService.addProduct(seller, product, this.category);
+			productService.addProduct(seller, product, this.category);
 		} catch (CustomeFieldValidationException cfve) {
 			result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
 		} catch (Exception e) {
@@ -439,7 +443,7 @@ public class UserController {
 
 			String encodedString = Base64.getEncoder().encodeToString(fileContent);
 
-			userService.save(encodedString);
+			productService.save(encodedString);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -501,7 +505,7 @@ public class UserController {
 
 		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
-		userService.addToCart(productToSave, Integer.valueOf(quantity), user);
+		productService.addToCart(productToSave, Integer.valueOf(quantity), user);
 
 		return "index";
 	}
@@ -517,7 +521,7 @@ public class UserController {
 
 		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
 
-		userService.addBuyNow(productToSave, Integer.valueOf(quantity), user);
+		productService.addBuyNow(productToSave, Integer.valueOf(quantity), user);
 
 		return ResponseEntity.ok("Success");
 	}
@@ -539,7 +543,7 @@ public class UserController {
 		}
 
 		for(Cart cart : cartList){
-			userService.addBuyNow(cart.getProductId(), cart.getQuantity(), user);
+			productService.addBuyNow(cart.getProductId(), cart.getQuantity(), user);
 		}
 
 		return "redirect:/userForm";

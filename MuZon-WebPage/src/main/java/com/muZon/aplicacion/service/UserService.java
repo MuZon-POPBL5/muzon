@@ -1,6 +1,5 @@
 package com.muZon.aplicacion.service;
 
-
 import java.util.Optional;
 
 import com.muZon.aplicacion.dto.ChangePasswordForm;
@@ -25,15 +24,7 @@ public interface UserService {
 
 	public User changePasswordById(Long id, String newPassword, String confirmPassowrd) throws Exception;
 
-	public Product addProduct(User seller, Product product, String category) throws Exception;
-
-	public void save(String bytes);
-
 	public User changeEmail(User user, String newEmail);
-
-    public Cart addToCart(Product productToSave, Integer quantity, Optional<User> user);
-
-	public Buy addBuyNow(Product productToSave, Integer quantity, Optional<User> user);
 
     public Optional<User> getUserByUsername(String username);
 }
