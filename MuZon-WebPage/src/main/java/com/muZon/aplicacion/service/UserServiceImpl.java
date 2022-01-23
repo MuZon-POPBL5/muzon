@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-	byte[] imgSrc;
+	String imgSrc;
 
 	@Autowired
 	UserRepository repository;
@@ -160,7 +160,6 @@ public class UserServiceImpl implements UserService {
 		newProduct.setDescription(product.getDescription());
 		newProduct.setPrice(product.getPrice());
 		newProduct.setImgSrc(this.imgSrc);
-		//imgSrc = new byte[];
 		newProduct.setQuantity(product.getQuantity());
 		newProduct.setCategory(category);
 		Optional<User> sellerData = repository.findById(seller.getId());
@@ -170,7 +169,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void save(byte[] bytes) {
+	public void save(String bytes) {
 		this.imgSrc = bytes;
 	}
 

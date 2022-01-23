@@ -41,7 +41,8 @@
         <div id="myTab" role="tablist">
             <div class="container-fluid my-3">
                 <div class="container row justify-content-between">
-                    <img src="..." class="my-3 col-4 h-50">
+                    <small id="src" class="d-none" th:text="${product.imgSrc}"></small>
+                    <img id="img" src="" class="my-3 col-4 h-50">
 
                     <div class="col-8">
                         <div class="container mt-2 d-flex flex-wrap">
@@ -79,6 +80,12 @@
 </body>
 
 <script>
+    var imgSrc = $("#src").text();
+
+    $(document).ready(function () {
+        $("#img").attr("src", "data:image/png;base64," + imgSrc);
+    });
+
     function addToCart() {
         var http = new XMLHttpRequest();
         var id = $("#prId").text();
@@ -99,7 +106,7 @@
                     if (http.status === 200) {
                         $("#success").addClass("d-none");
                         $("#added").removeClass("d-none");
-                    } 
+                    }
                 }
 
                 http.send("cq=" + quantity);
@@ -127,7 +134,7 @@
                     if (http.status === 200) {
                         $("#success").removeClass("d-none");
                         $("#added").addClass("d-none");
-                    } 
+                    }
                 }
 
                 http.send("cq=" + quantity);

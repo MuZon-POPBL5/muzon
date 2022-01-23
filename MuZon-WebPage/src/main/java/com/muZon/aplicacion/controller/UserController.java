@@ -3,6 +3,7 @@ package com.muZon.aplicacion.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -434,13 +435,11 @@ public class UserController {
 	public ResponseEntity<?> singleFileUpload(@RequestParam() MultipartFile file,
 			RedirectAttributes redirectAttributes) {
 		try {
-			byte[] bytes = file.getBytes();
-			/*
-			 * Path path = Paths.get(file.getOriginalFilename());
-			 * Files.write(path, bytes);
-			 */
+			byte[] fileContent = file.getBytes();
 
-			userService.save(bytes);
+			String encodedString = Base64.getEncoder().encodeToString(fileContent);
+
+			userService.save(encodedString);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -460,11 +459,10 @@ public class UserController {
 		model.addAttribute("user", user);
 		model.addAttribute("editMode", "true");
 
-		
 		Product productToDisplay = productRepository.findById(id).orElseThrow();
 		model.addAttribute("product", productToDisplay);
 
-		return "user-form/buyProduct";	
+		return "user-form/buyProduct";
 	}
 
 	@PostMapping("/displayProducts")
