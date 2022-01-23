@@ -45,7 +45,7 @@
 							<div class="d-flex flex-column mx-1">
 								<div class="form-floating mb-1">
 									<input class="form-control" id="floatingInput" type="number"
-										th:field="${productForm.quantity}" th:disabled="${disableFields}" required>
+										th:field="${productForm.quantity}" value="1" min="1" th:disabled="${disableFields}" required>
 									<label for="floatingInput">Quantity</label>
 									<div class="alert-danger" th:if="${#fields.hasErrors('quantity')}"
 										th:errors="*{quantity}">
@@ -55,7 +55,7 @@
 
 								<div class="form-floating mb-1">
 									<input class="form-control" id="floatingInput" type="number"
-										th:field="${productForm.price}" th:disabled="${disableFields}" required>
+										th:field="${productForm.price}" min="0" th:disabled="${disableFields}" required>
 									<label for="floatingInput">Price</label>
 									<div class="alert-danger" th:if="${#fields.hasErrors('price')}"
 										th:errors="*{price}">
