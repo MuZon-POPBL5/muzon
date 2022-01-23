@@ -12,13 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
+@Table(name = "User")
 public class User implements Serializable {
 
 	/**
@@ -44,9 +45,6 @@ public class User implements Serializable {
 	@Column
 	@NotBlank
 	private String password;
-	@Column
-	@NotBlank
-	private String address;
 
 	@Size(min = 1)
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -102,14 +100,6 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -122,7 +112,7 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", email=" + email
 				+ ", username=" + username + ", password=" + password
-				+ ", roles=" + roles + ", address" + address + "]";
+				+ ", roles=" + roles + "]";
 	}
 
 	@Override
@@ -136,7 +126,6 @@ public class User implements Serializable {
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		return result;
 	}
 
@@ -179,11 +168,7 @@ public class User implements Serializable {
 				return false;
 		} else if (!username.equals(other.username))
 			return false;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
 		return true;
 	}
 }
+

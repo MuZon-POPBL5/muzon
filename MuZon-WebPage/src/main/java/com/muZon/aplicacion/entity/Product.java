@@ -38,7 +38,7 @@ public class Product implements Serializable {
 
     @Lob
     @Column
-    private byte[] imgSrc;
+    private String imgSrc;
 
     @Column
     private float price;
@@ -66,11 +66,11 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public byte[] getImgSrc() {
+    public String getImgSrc() {
         return imgSrc;
     }
 
-    public void setImgSrc(byte[] imgSrc) {
+    public void setImgSrc(String imgSrc) {
         this.imgSrc = imgSrc;
     }
 
@@ -188,3 +188,4 @@ public class Product implements Serializable {
                 + ", sellerId=" + sellerId + ", category=" + category + "]";
     }
 }
+
