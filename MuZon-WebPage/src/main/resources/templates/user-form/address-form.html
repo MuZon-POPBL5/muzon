@@ -2,57 +2,35 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>User Information and Form</title>
-
-    <!--JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-
-    <!-- Los iconos tipo Solid de Fontawesome-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
-    <script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-
-    <!-- Nuestro css-->
-    <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
-
-    <!-- DATA TABLE -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
-            $('#userList').DataTable();
-        });
-    </script>
+	<title>Muzon</title>
+	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
 </head>
 
 <body>
-    <div class="container px-5">
+     <div class="container px-5 bg-#d3d5d8 rounded">
         <div id="myTab" role="tablist">
-            <div class="container-fluid row pt-2">
-                <div class="col-12 text-center">
+            <div class="d-flex pt-2">
+                <div id="back" class="pt-2 px-1 mr-5">
+                    <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
+                </div>
+
+                <div class="text-center pt-2 mx-5">
                     <button type="button" class="btn btn-secondary" data-toggle="modal" th:if="${editMode}"
                         data-target="#addAddressModal">New Address</button>
                 </div>
             </div>
-            <div class="container-fluid mt-4">
-                <div class="container d-flex flex-wrap justify-content-between">
+            <div class="mt-4">
+                <div class="d-flex flex-wrap">
                     <tr th:each="addresses: ${addressList}">
-                        <div class="card my-2">
-                            <div class="card-header" th:text="${addresses.address}"></div>
+                        <div class="card my-2 ml-1">
+                            <h5 class="card-header text-capitalize" th:text="${addresses.address}"></h5>
                             <div class="card-body">
-                                <blockquote class="blockquote mb-0">
-                                    <footer class="blockquote-footer">Someone famous in <cite
-                                            title="Source Title">Source Title</cite></footer>
+                                <blockquote class="blockquote mb-0 d-flex flex-column">
+                                    <small><a th:if="${addresses.defaultAddress == 0}"
+                                            th:href="@{'/setDefault/'+ ${addresses.id}}">Set as
+                                            default</a></small>
+                                    <small><b><a class="text-muted" th:if="${addresses.defaultAddress == 0}"
+                                                th:href="@{'/delete/'+ ${addresses.id}}">Delete</a></small></b>
                                 </blockquote>
                             </div>
                         </div>
@@ -65,3 +43,4 @@
 </body>
 
 </html>
+

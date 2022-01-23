@@ -1,64 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!--JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-        crossorigin="anonymous"></script>
-
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-
-
-    <script src="lib/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+	<title>Muzon</title>
+	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
 </head>
 
 <body>
-    <div id="back" class="d-none container pt-2 px-1 mx-3">
+     <div id="back" class="d-none container pt-2 px-1 mx-3">
         <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
-    </div>
-
-    <div id="searchAndSell" class="container-fluid pt-1">
-        <div class="row flex-nowrap justify-content-between mb-4">
-            <div class="col-3">
-                <div class="m-0 px-0 text-center">
-                    <tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
-                        <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})"
-                            class="p-0 m-0 text-decoration-none" href="#" th:href="@{'/sell/'+ ${user.id}}">
-                            <button class="btn btn-outline-secondary text-dark text-center" type="submit">
-                                <i class="fas fa-plus text-dark" alt="Icon to add new products for selling"></i> Sell
-                            </button>
-                            <div id="idU" th:text="${user.id}" class="d-none"></div>
-                        </a>
-                    </tr>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div id="principal" class="container-fluid">
         <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-inner pb-3">
                 <div class="carousel-item active">
-                    <div class="container d-flex justify-content-around px-3">
+                    <div class="container d-flex justify-content-around flex-column flex-md-row px-3">
 
                         <div><a onclick="displayCarrousel('clothes')" class="text-decoration-none text-dark">
                                 <div class="card" style="width: 15rem;">
@@ -97,7 +54,7 @@
                 </div>
 
                 <div class="carousel-item">
-                    <div class="container d-flex justify-content-around px-3">
+                    <div class="container d-flex justify-content-around flex-column flex-md-row px-3">
                         <div><a onclick="displayCarrousel('music')" class="text-decoration-none text-dark">
                                 <div class="card" style="width: 15rem;">
                                     <div class="card-body text-center">
@@ -134,7 +91,7 @@
                 </div>
 
                 <div class="carousel-item">
-                    <div class="container d-flex justify-content-around px-3">
+                    <div class="container d-flex justify-content-around flex-column flex-md-row px-3">
                         <div><a onclick="displayCarrousel('bicycle')" class="text-decoration-none text-dark">
                                 <div class="card" style="width: 15rem;">
                                     <div class="card-body text-center">
@@ -198,23 +155,20 @@
             <h6>Recommended Products</h6>
             <div class="list-group list-group-horizontal bg-white overflow-auto text-nowrap flex-row border-0 p-0">
                 <tr th:each="product: ${productList}">
-                    <a onclick="displayProduct()" class=" list-group-item list-group-item-action
-                    bg-transparent border-0 py-2 my-0">
-                        <img src="img/spanishFlag.png" class="py-0" alt="...">
+                    <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
+                        <img src="img/spanishFlag.png" class="p-1 w-50 w-md-75 w-lg-100" alt="...">
                     </a>
-                    <div class="d-none" id="idP" th:text="${product.id}"></div>
                 </tr>
             </div>
         </div>
 
-
         <div class="container-fluid mb-3 p-0">
-            <div class="d-flex justify-content-between flex-nowrap gap-3">
+            <div class="d-flex justify-content-between flex-nowrap flex-column flex-lg-row gap-3">
                 <div class="box border-0">
                     <h6 class="m-1">Most Sold</h6>
                     <div class="d-flex flex-wrap">
-                        <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                                alt="...">
+                        <a href="#" class=" text-decoration-none text-dark"><img src="img/englishFlag.png"
+                                class="p-1 w-50 w-md-75 w-lg-100" alt="...">
                             <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png"
                                     class="p-1" alt="...">
                     </div>
@@ -222,9 +176,9 @@
                 <div class="box border-0">
                     <h6 class="m-1">Newness</h6>
                     <div class="d-flex flex-wrap">
-                        <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png" class="p-1"
-                                alt="...">
-                            <a href="#" class="text-decoration-none text-dark"><img src="img/englishFlag.png"
+                        <a href="#" class="img-fluid text-decoration-none text-dark"><img src="img/englishFlag.png"
+                                class="p-1" alt="...">
+                            <a href="#" class="img-fluid text-decoration-none text-dark"><img src="img/englishFlag.png"
                                     class="p-1" alt="...">
                     </div>
                 </div>
@@ -256,8 +210,7 @@
 <script>
     function displayCarrousel(clicked) {
         var http = new XMLHttpRequest();
-        var idU = $("#idU").text();
-        var url = "/displayProducts/" + idU;
+        var url = "/displayProducts/";
 
         http.open('POST', url, true);
 
@@ -266,33 +219,12 @@
                 $("#cambios").removeClass("d-none");
                 $("#cambios").html(http.responseText);
                 $("#principal").addClass("d-none");
-                $("#back").removeClass("d-none");
                 $("#searchAndSell").addClass("d-none");
+                $("#back").removeClass("d-none");
             }
         }
 
         http.send("ccate=" + clicked);
-    }
-
-    function displayProduct() {
-        var http = new XMLHttpRequest();
-        var idU = $("#idU").text();
-        var idP = $("#idP").text();
-        var url = "/displayProducts/" + idU;
-
-        http.open('POST', url, true);
-
-        http.onreadystatechange = function () {//Call a function when the state changes.
-            if (http.status == 200) {
-                $("#cambios").removeClass("d-none");
-                $("#cambios").html(http.responseText);
-                $("#principal").addClass("d-none");
-                $("#back").removeClass("d-none");
-                $("#searchAndSell").addClass("d-none");
-            }
-        }
-
-        http.send("cp=" + idP);
     }
 
     var prevScrollpos = window.pageYOffset;

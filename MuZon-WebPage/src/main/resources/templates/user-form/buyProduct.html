@@ -2,42 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>User Information and Form</title>
-
-    <!--JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <!-- Los iconos tipo Solid de Fontawesome-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
-    <script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-
-    <!-- Nuestro css-->
-    <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
-
-    <!-- DATA TABLE -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+	<title>Muzon</title>
+	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
 </head>
 
 <body>
-    <div id="success" class="mt-3 d-none alert alert-success alert-dismissible fade show" role="alert">Buy Done</div>
-    <div id="compra" class="container pt-0 mt-0">
+     <div id="compra" class="container pt-0 mt-0 bg-#d3d5d8 rounded">
+        <div id="success" class="d-none alert alert-success alert-dismissible fade show" role="alert">Buy Done
+        </div>
+        <div id="added" class="d-none alert alert-info alert-dismissible fade show" role="alert">Added to cart
+        </div>
+
+        <div id="back" class="container pt-2 px-1 mx-3">
+            <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
+        </div>
         <div id="myTab" role="tablist">
             <div class="container-fluid my-3">
                 <div class="container row justify-content-between">
-                    <img src="..." class="my-3 col-4 h-50">
+                    <small id="src" class="d-none" th:text="${product.imgSrc}"></small>
+                    <img id="img" src="" class="my-3 col-4 h-50">
 
                     <div class="col-8">
                         <div class="container mt-2 d-flex flex-wrap">
@@ -69,18 +52,22 @@
             </div>
         </div>
 
-        <div class="d-none" id="userId" th:text="${user.id}"></div>
         <div class="d-none" id="prId" th:text="${product.id}"></div>
         <div class="d-none" id="prQuantity" th:text="${product.quantity}"></div>
     </div>
 </body>
 
 <script>
+    var imgSrc = $("#src").text();
+
+    $(document).ready(function () {
+        $("#img").attr("src", "data:image/png;base64," + imgSrc);
+    });
+
     function addToCart() {
         var http = new XMLHttpRequest();
         var id = $("#prId").text();
         var quantity = $("#quantity").val();
-        var userId = $("#userId").text();
         var prQuantity = $("#prQuantity").text();
 
         if (quantity === "") {
@@ -95,11 +82,12 @@
 
                 http.onload = function () {
                     if (http.status === 200) {
-                        $("#success").removeClass("d-none");
-                    } 
+                        $("#success").addClass("d-none");
+                        $("#added").removeClass("d-none");
+                    }
                 }
 
-                http.send("ci=" + userId + ",cq=" + quantity);
+                http.send("cq=" + quantity);
             }
         }
     }
@@ -108,7 +96,6 @@
         var http = new XMLHttpRequest();
         var id = $("#prId").text();
         var quantity = $("#quantity").val();
-        var userId = $("#userId").text();
         var prQuantity = $("#prQuantity").text();
 
         if (quantity === "") {
@@ -124,10 +111,11 @@
                 http.onload = function () {
                     if (http.status === 200) {
                         $("#success").removeClass("d-none");
-                    } 
+                        $("#added").addClass("d-none");
+                    }
                 }
 
-                http.send("ci=" + userId + ",cq=" + quantity);
+                http.send("cq=" + quantity);
             }
         }
     }
