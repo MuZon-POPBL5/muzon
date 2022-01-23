@@ -36,18 +36,22 @@
 </head>
 
 <body>
-    <div class="container px-5">
+    <div class="container px-5 bg-#d3d5d8 rounded">
         <div id="myTab" role="tablist">
-            <div class="container-fluid row pt-2">
-                <div class="col-12 text-center">
+            <div class="d-flex pt-2">
+                <div id="back" class="pt-2 px-1 mr-5">
+                    <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
+                </div>
+
+                <div class="text-center pt-2 mx-5">
                     <button type="button" class="btn btn-secondary" data-toggle="modal" th:if="${editMode}"
                         data-target="#addAddressModal">New Address</button>
                 </div>
             </div>
-            <div class="container-fluid mt-4">
-                <div class="container-fluid d-flex flex-wrap">
+            <div class="mt-4">
+                <div class="d-flex flex-wrap">
                     <tr th:each="addresses: ${addressList}">
-                        <div class="card my-2 mx-4">
+                        <div class="card my-2 ml-1">
                             <h5 class="card-header text-capitalize" th:text="${addresses.address}"></h5>
                             <div class="card-body">
                                 <blockquote class="blockquote mb-0 d-flex flex-column">

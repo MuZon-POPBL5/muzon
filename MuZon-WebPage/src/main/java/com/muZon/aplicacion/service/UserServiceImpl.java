@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
 		buy.setProductId(productToSave);
 		buy.setQuantity(quantity);
 		buy.setPrice(quantity*productToSave.getPrice());
-		buy.setSellerId(user.get());
+		buy.setBoughtId(user.get());
 
 		return repositoryBuy.save(buy);
 	}

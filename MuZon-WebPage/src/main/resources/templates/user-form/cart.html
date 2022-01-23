@@ -28,36 +28,41 @@
 </head>
 
 <body>
-    <ol class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Habilitar cuando haya guardado en carrito</div>
-            </div>
-            <span class="badge bg-primary rounded-pill">!</span>
-        </li>
-    </ol>
-
-    <tr th:each="product: ${cartList}">
-        <div class="container-fluid row mt-3">
-            <div class="col-4 border border-dark rounded">
-                <img src="" class="card-img-top text-dark m-0 p-0" alt="Product image">
-            </div>
-            <div class="col-6">
-                <div class="d-flex flex-column">
-                    <h5 class="card-title text-dark" th:text="${product.productId.name}"></h5>
-                    <p class="card-text text-dark" th:text="${product.productId.description}"></p>
+    <div class="d-flex flex-wrap justify-content-between">
+        <div>
+            <tr th:each="product: ${cartList}">
+                <div class="container-fluid d-flex flex-wrap m-1 mt-2 w-lg-50 flex-row border border-dark rounded">
+                    <div class="col-4">
+                        <small id="src" class="d-none" th:text="${product.productId.imgSrc}"></small>
+                        <img id="img" src="" class="card-img-top text-dark p-2" alt="Img">
+                    </div>
+                    <div class="col-6 p-2">
+                        <div class="d-flex flex-column">
+                            <h5 class="card-title text-dark text-capitalize" th:text="${product.productId.name}"></h5>
+                            <p class="card-text text-dark text-capitalize" th:text="${product.productId.description}">
+                            </p>
+                        </div>
+                        <p class="border border-dark rounded card-text text-dark bg-white w-15 text-center mt-1"
+                            th:text="${product.quantity}">
+                        </p>
+                    </div>
+                    <div class="col-2 p-2">
+                        <div class="d-inline-flex">
+                            <h4 class="price card-text text-dark" th:text="${product.price}"></h4>
+                            <h4 class="price">€</h4>
+                        </div>
+                    </div>
                 </div>
-                <p class="border border-dark rounded card-text text-dark bg-white w-5" th:text="${product.quantity}">
-                </p>
-            </div>
-            <div class="col-2">
-                <div class="d-inline-flex">
-                    <h4 class="price card-text text-dark" th:text="${product.price}"></h4>
-                    <h4>€</h4>
-                </div>
+            </tr>
+        </div>
+        <div class="d-flex flex-column mr-5">
+            <h4 id="totalPrice" class="pr-3 text-center">Total: </h4>
+            <div class="form container-fluid mt-3 mx-0 pr-3">
+                <a th:href="@{/buyAll}"><button type="button" class="btn btn-lg btn-outline-dark">Buy
+                        Now</button></a>
             </div>
         </div>
-    </tr>
+    </div>
 
     <div class="d-none py-3 footer fixed-bottom text-end" id="backtotop">
         <span class="fa-stack mx-2 fa-lg">
@@ -70,6 +75,20 @@
 </body>
 
 <script>
+    var imgSrc = $("#src").text();
+    var price = $(".price").text();
+    var sumPrices = [];
+    var total = 0;
+
+    sumPrices = price.split(["€"]);
+
+    for (let i = 0; i < sumPrices.length; i++)total += Number(sumPrices[i]);
+
+    $(document).ready(function () {
+        $("#img").attr("src", "data:image/png;base64," + imgSrc);
+        $("#totalPrice").append(total + " €");
+    });
+
     var prevScrollpos = window.pageYOffset;
     var first = 0;
     window.onscroll = function () {

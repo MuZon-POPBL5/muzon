@@ -521,4 +521,27 @@ public class UserController {
 
 		return ResponseEntity.ok("Success");
 	}
+
+	@GetMapping("/buyAll")
+	public String buyAll(Model model) throws Exception {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Optional<User> user = userService.getUserByUsername(((UserDetails) principal).getUsername());
+
+		List<Cart> cartList = new ArrayList<>();		
+
+		Iterable<Cart> cr = cartRepository.findAll();
+
+		for (Cart cart : cr) {
+			if (cart.getSellerId().getId() == (user.get().getId())) {
+				cartList.add(cart);
+			}
+		}
+
+		for(Cart cart : cartList){
+			userService.addBuyNow(cart.getProductId(), cart.getQuantity(), user);
+		}
+
+		return "redirect:/userForm";
+	}
 }
