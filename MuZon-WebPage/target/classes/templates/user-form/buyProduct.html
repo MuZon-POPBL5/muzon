@@ -1,77 +1,72 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--JQUERY-->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-<head>
-    <title>Muzon</title>
-     <!--JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<!--BOOTSTRAP-->
 
-    <!--BOOTSTRAP-->
-    
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <!--JavaScript Bundle with Popper-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
+<!--JavaScript Bundle with Popper-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
 
-    <!--OUR CSS-->
-    <link rel="stylesheet" type="text/css" href="/css/user-form.css">
-    <link rel="stylesheet" type="text/css" href="/css/main.css">
-</head>
+<!--OUR CSS-->
+<link rel="stylesheet" type="text/css" href="/css/user-form.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
 
-<body>
-     <div id="compra" class="container pt-0 mt-0 bg-#d3d5d8 rounded">
-        <div id="success" class="d-none alert alert-success alert-dismissible fade show" role="alert">Buy Done
-        </div>
-        <div id="added" class="d-none alert alert-info alert-dismissible fade show" role="alert">Added to cart
-        </div>
 
-        <div id="back" class="container pt-2 px-1 mx-3">
-            <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
-        </div>
-        <div id="myTab" role="tablist">
-            <div class="container-fluid my-3">
-                <div class="container row justify-content-between">
-                    <small id="src" class="d-none" th:text="${product.imgSrc}"></small>
-                    <img id="img" src="" class="my-3 col-4 h-50">
 
-                    <div class="col-8">
-                        <div class="container mt-2 d-flex flex-wrap">
-                            <h2 class="mx-2" th:text="${product.name}"></h2>
-                            <div class="d-inline-flex">
-                                <h3 class="mx-2" th:text="${product.price}"></h3>
-                                <h3 class="m-0 p-0">€</h3>
-                            </div>
+<div id="compra" class="container pt-0 mt-0 bg-#d3d5d8 rounded">
+    <div id="success" class="d-none alert alert-success alert-dismissible fade show" role="alert">Buy Done
+    </div>
+    <div id="added" class="d-none alert alert-info alert-dismissible fade show" role="alert">Added to cart
+    </div>
+
+    <div id="back" class="container pt-2 px-1 mx-3">
+        <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
+    </div>
+    <div id="myTab" role="tablist">
+        <div class="container-fluid my-3">
+            <div class="container row justify-content-between">
+                <small id="src" class="d-none" th:text="${product.imgSrc}"></small>
+                <img id="img" src="" class="my-3 col-4 h-50">
+
+                <div class="col-8">
+                    <div class="container mt-2 d-flex flex-wrap">
+                        <h2 class="mx-2" th:text="${product.name}"></h2>
+                        <div class="d-inline-flex">
+                            <h3 class="mx-2" th:text="${product.price}"></h3>
+                            <h3 class="m-0 p-0">€</h3>
+                        </div>
+                    </div>
+
+                    <div class="container d-flex flex-wrap mb-3">
+                        <span class="mx-2" th:text="${product.description}"></span>
+                        <input class="mx-4" maxlength="2" size="2" type="number" value="1" min="1"
+                            th:max="${product.quantity}" name="text" id="quantity" placeholder="0"
+                            required /><br /><br />
+                    </div>
+
+                    <div>
+                        <div class="form container-fluid mt-3">
+                            <button type="button" onclick="buyNow()" class="btn btn-outline-dark">Buy Now</button>
                         </div>
 
-                        <div class="container d-flex flex-wrap mb-3">
-                            <span class="mx-2" th:text="${product.description}"></span>
-                            <input class="mx-4" maxlength="2" size="2" type="number" value="1" min="1"
-                                th:max="${product.quantity}" name="text" id="quantity" placeholder="0"
-                                required /><br /><br />
-                        </div>
-
-                        <div>
-                            <div class="form container-fluid mt-3">
-                                <button type="button" onclick="buyNow()" class="btn btn-outline-dark">Buy Now</button>
-                            </div>
-
-                            <div class="form container-fluid mt-3">
-                                <button type="button" onclick="addToCart()" class="btn btn-outline-primary">Add to
-                                    cart</button>
-                            </div>
+                        <div class="form container-fluid mt-3">
+                            <button type="button" onclick="addToCart()" class="btn btn-outline-primary">Add to
+                                cart</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="d-none" id="prId" th:text="${product.id}"></div>
-        <div class="d-none" id="prQuantity" th:text="${product.quantity}"></div>
     </div>
-</body>
+
+    <div class="d-none" id="prId" th:text="${product.id}"></div>
+    <div class="d-none" id="prQuantity" th:text="${product.quantity}"></div>
+</div>
+
 
 <script>
     var imgSrc = $("#src").text();
@@ -90,7 +85,7 @@
             alert("You did not set a quantity");
         } else {
             if (quantity > prQuantity) alert("Not enough stock");
-            else if(quantity < 0)alert("Only positive numbers smartass");
+            else if (quantity < 0) alert("Only positive numbers smartass");
 
             else {
                 var url = "/addToCart/" + id;
@@ -119,7 +114,7 @@
             alert("You did not set a quantity");
         } else {
             if (quantity > prQuantity) alert("Not enough stock");
-            else if(quantity < 0)alert("Only positive numbers smartass");
+            else if (quantity < 0) alert("Only positive numbers smartass");
 
             else {
                 var url = "/buyNow/" + id;
@@ -138,5 +133,3 @@
         }
     }
 </script>
-
-</html>
