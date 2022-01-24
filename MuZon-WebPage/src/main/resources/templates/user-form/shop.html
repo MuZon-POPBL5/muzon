@@ -156,7 +156,7 @@
             <div class="list-group list-group-horizontal bg-white overflow-auto text-nowrap flex-row border-0 p-0">
                 <tr th:each="product: ${productList}">
                     <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
-                        <img src="img/spanishFlag.png" class="p-1 w-50 w-md-75 w-lg-100" alt="...">
+                    <span th:text="${product.name}"></span>
                     </a>
                 </tr>
             </div>
