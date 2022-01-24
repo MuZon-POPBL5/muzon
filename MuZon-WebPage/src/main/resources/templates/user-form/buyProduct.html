@@ -8,7 +8,7 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
     <!--BOOTSTRAP-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <!--JavaScript Bundle with Popper-->
@@ -17,7 +17,8 @@
         crossorigin="anonymous"></script>
 
     <!--OUR CSS-->
-    <link rel="stylesheet" type="text/css" href="static/css/user-form.css" th:href="@{/css/user-form.css}">
+    <link rel="stylesheet" type="text/css" href="/css/user-form.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
 <body>
@@ -89,6 +90,7 @@
             alert("You did not set a quantity");
         } else {
             if (quantity > prQuantity) alert("Not enough stock");
+            else if(quantity < 0)alert("Only positive numbers smartass");
 
             else {
                 var url = "/addToCart/" + id;
@@ -117,6 +119,7 @@
             alert("You did not set a quantity");
         } else {
             if (quantity > prQuantity) alert("Not enough stock");
+            else if(quantity < 0)alert("Only positive numbers smartass");
 
             else {
                 var url = "/buyNow/" + id;
