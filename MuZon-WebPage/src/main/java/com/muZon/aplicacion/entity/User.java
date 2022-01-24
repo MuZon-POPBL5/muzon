@@ -18,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @Table(name = "User")
@@ -35,13 +36,13 @@ public class User implements Serializable {
 
 	@Column
 	@NotBlank
-	@Size(min = 5, max = 8, message = "No se cumple las reglas del tamano")
 	private String firstName;
 	@Column
 	@NotBlank
 	private String email;
 	@Column
 	@NotBlank
+	@UniqueElements
 	private String username;
 	@Column
 	@NotBlank
