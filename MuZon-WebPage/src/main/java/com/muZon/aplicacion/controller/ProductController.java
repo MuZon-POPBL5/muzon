@@ -201,6 +201,10 @@ public class ProductController {
 
 		productService.addBuyNow(productToSave, Integer.valueOf(quantity), user);
 
+		int stock = productToSave.getQuantity() - Integer.valueOf(quantity);
+
+		productService.changeStock(productToSave, stock);
+
 		return ResponseEntity.ok("Success");
 	}
 
