@@ -64,7 +64,8 @@ public class IndexController {
 		model.addAttribute("userForm", user);
 		model.addAttribute("roles", roles);
 		model.addAttribute("signup", true);
-
+		Date td = new Date();
+		user.setCreationDate(td);
 		try {
 			userService.createUser(user);
 		} catch (CustomeFieldValidationException cfve) {

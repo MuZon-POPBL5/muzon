@@ -1,6 +1,7 @@
 package com.muZon.aplicacion.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -45,6 +46,8 @@ public class User implements Serializable {
 	@Column
 	@NotBlank
 	private String password;
+	@Column
+	private Date creation_date;
 
 	@Size(min = 1)
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -66,6 +69,14 @@ public class User implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Date getCreationDate() {
+		return creation_date;
+	}
+
+	public void setCreationDate(Date creation_date) {
+		this.creation_date = creation_date;
 	}
 
 	public String getFirstName() {
@@ -112,7 +123,7 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", email=" + email
 				+ ", username=" + username + ", password=" + password
-				+ ", roles=" + roles + "]";
+				+ ", roles=" + roles + " , creation_date=" + creation_date + "]";
 	}
 
 	@Override
@@ -126,6 +137,8 @@ public class User implements Serializable {
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((creation_date == null) ? 0 : creation_date.hashCode());
+
 		return result;
 	}
 
@@ -168,7 +181,11 @@ public class User implements Serializable {
 				return false;
 		} else if (!username.equals(other.username))
 			return false;
+		if (creation_date == null) {
+			if (other.creation_date != null)
+				return false;
+		} else if (!creation_date.equals(other.creation_date))
+			return false;
 		return true;
 	}
 }
-
