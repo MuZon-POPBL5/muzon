@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-	<title>Muzon</title>
-	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
-</head>
+<div th:insert="fragments/head.html::head" th:remove="tag"></div>
 
-<body>
+
+
      <div class="d-flex flex-wrap justify-content-between">
         <div>
             <tr th:each="product: ${cartList}">
@@ -51,7 +47,7 @@
             </a>
         </span>
     </div>
-</body>
+
 
 <script>
     var imgSrc = $("#src").text();
@@ -92,5 +88,5 @@
     }
 </script>
 
-</html>
+
 

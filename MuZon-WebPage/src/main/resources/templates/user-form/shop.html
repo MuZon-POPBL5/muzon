@@ -1,12 +1,9 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-	<title>Muzon</title>
-	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
-</head>
 
-<body>
+<div th:insert="fragments/head.html::head" th:remove="tag"></div>
+
+
+
      <div id="back" class="d-none container pt-2 px-1 mx-3">
         <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
     </div>
@@ -162,7 +159,6 @@
             </div>
         </div>
     </div>
-</body>
 
 <script>
     function displayCarrousel(clicked) {
@@ -208,4 +204,4 @@
     }
 </script>
 
-</html>
+
