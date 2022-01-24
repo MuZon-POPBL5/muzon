@@ -18,5 +18,6 @@ public interface ProductService {
 	public Buy addBuyNow(Product productToSave, Integer quantity, Optional<User> user);
 
     public void deleteCart(User user);
-    
+
+    public Product changeStock(Product product, int stock);    
 }

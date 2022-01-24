@@ -80,4 +80,11 @@ public class ProductServiceImpl implements ProductService{
 	public void deleteCart(User user) {
 		repositoryCart.deleteByBoughtId(user);
 	}
+
+	@Override
+	public Product changeStock(Product product, int stock) {
+		product.setQuantity(stock);
+
+		return repositoryProduct.save(product);
+	}
 }

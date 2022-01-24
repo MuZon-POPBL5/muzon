@@ -128,19 +128,6 @@ public class UserServiceImpl implements UserService {
 		return repository.save(user);
 	}
 
-	private boolean isLoggedUserADMIN() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails loggedUser = null;
-		if (principal instanceof UserDetails) {
-			loggedUser = (UserDetails) principal;
-
-			loggedUser.getAuthorities().stream()
-					.filter(x -> "ADMIN".equals(x.getAuthority()))
-					.findFirst().orElse(null); // loggedUser = null;
-		}
-		return loggedUser != null ? true : false;
-	}
-
 	@Override
 	public User changeEmail(User user, String newEmail) {
 		user.setEmail(newEmail);
