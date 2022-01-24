@@ -1,9 +1,13 @@
 
+<div th:insert="fragments/head.html::head" th:remove="tag"></div>
+
+
 	<div class="table-responsive">
 		<table id="userList" class="table table-bordered table-hover table-striped">
 			<tbody>
-				<tr th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})" th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
-					
+				<tr th:each="user: ${userList}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+					<span
+						th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
 						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4 text-dark" href="#"
 							th:href="@{'/accountSettings/'+ ${user.id}}">My Account</a>
 						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark"
@@ -23,7 +27,7 @@
 					</form>
 	</div>
 	</div>
-	
+	</span>
 	</tr>
 	</tbody>
 	</table>
