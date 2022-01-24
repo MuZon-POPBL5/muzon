@@ -40,9 +40,8 @@ public class User implements Serializable {
 	@Column
 	@NotBlank
 	private String email;
-	@Column
+	@Column(unique = true)
 	@NotBlank
-	@UniqueElements
 	private String username;
 	@Column
 	@NotBlank
