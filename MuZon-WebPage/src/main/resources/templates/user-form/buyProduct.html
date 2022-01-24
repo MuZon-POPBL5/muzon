@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div id="compra" class="container pt-0 mt-0 bg-#d3d5d8 rounded">
+     <div id="compra" class="container pt-0 mt-0 bg-#d3d5d8 rounded">
         <div id="success" class="d-none alert alert-success alert-dismissible fade show" role="alert">Buy Done
         </div>
         <div id="added" class="d-none alert alert-info alert-dismissible fade show" role="alert">Added to cart
@@ -54,6 +54,7 @@
         </div>
 
         <div class="d-none" id="prId" th:text="${product.id}"></div>
+        <div class="d-none" id="prQuantity" th:text="${product.quantity}"></div>
     </div>
 </body>
 
@@ -68,38 +69,56 @@
         var http = new XMLHttpRequest();
         var id = $("#prId").text();
         var quantity = $("#quantity").val();
+        var prQuantity = $("#prQuantity").text();
 
-        var url = "/addToCart/" + id;
+        if (quantity === "") {
+            alert("You did not set a quantity");
+        } else {
+            if (quantity > prQuantity) alert("Not enough stock");
 
-        http.open('POST', url, true);
+            else {
+                var url = "/addToCart/" + id;
 
-        http.onload = function () {
-            if (http.status === 200) {
-                $("#success").addClass("d-none");
-                $("#added").removeClass("d-none");
+                http.open('POST', url, true);
+
+                http.onload = function () {
+                    if (http.status === 200) {
+                        $("#success").addClass("d-none");
+                        $("#added").removeClass("d-none");
+                    }
+                }
+
+                http.send("cq=" + quantity);
             }
         }
-
-        http.send("cq=" + quantity);
     }
 
     function buyNow() {
         var http = new XMLHttpRequest();
         var id = $("#prId").text();
         var quantity = $("#quantity").val();
+        var prQuantity = $("#prQuantity").text();
 
-        var url = "/buyNow/" + id;
+        if (quantity === "") {
+            alert("You did not set a quantity");
+        } else {
+            if (quantity > prQuantity) alert("Not enough stock");
 
-        http.open('POST', url, true);
+            else {
+                var url = "/buyNow/" + id;
 
-        http.onload = function () {
-            if (http.status === 200) {
-                $("#success").removeClass("d-none");
-                $("#added").addClass("d-none");
+                http.open('POST', url, true);
+
+                http.onload = function () {
+                    if (http.status === 200) {
+                        $("#success").removeClass("d-none");
+                        $("#added").addClass("d-none");
+                    }
+                }
+
+                http.send("cq=" + quantity);
             }
         }
-
-        http.send("cq=" + quantity);
     }
 </script>
 

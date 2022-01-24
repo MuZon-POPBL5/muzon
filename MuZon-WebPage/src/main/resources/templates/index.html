@@ -23,13 +23,13 @@
     <div class="d-flex justify-content-center container">
         <form th:action="@{/login}" method="post">
             <div class="form-group mb-3" id="user-group">
-                <input type="text" class="form-control" placeholder="Nombre de usuario" name="username" />
+                <input type="text" class="form-control" placeholder="Username" name="username" />
             </div>
             <div class="form-group mb-3" id="contrasena-group">
-                <input type="password" class="form-control" placeholder="Contrasena" name="password" />
+                <input type="password" class="form-control" placeholder="Password" name="password" />
             </div>
-            <button type="submit" class="container btn btn-dark-teal"><i
-                    class="fas fa-sign-in-alt"></i>LOG IN</button>
+            <button type="submit" class="container btn btn-primary"><i
+                    class="fas fa-sign-in-alt"></i> LOG IN</button>
         </form>
     </div>
     <p class="text-center">New to Muzon? <a href="#" th:href="@{/signup}">Register</a></p>
