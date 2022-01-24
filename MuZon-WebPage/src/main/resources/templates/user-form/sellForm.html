@@ -12,8 +12,9 @@
 		<div class="container px-5">
 			<div id="myTab" role="tablist">
 				<div class="d-flex justify-content-center container">
-					<form class="form container-fluid mx-3 px-3 py-3" role="form" autocomplete="off"
+					<form th:if="(${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})" class="form container-fluid mx-3 px-3 py-3" role="form" autocomplete="off"
 						th:object="${productForm}" th:action="@{'/addProduct/'+ ${userId.id}}" method="post">
+						
 						<div class="form-group row mb-3">
 							<div class="form-group">
 								<div class="form-floating mb-1">
