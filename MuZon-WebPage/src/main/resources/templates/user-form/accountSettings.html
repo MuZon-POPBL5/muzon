@@ -3,12 +3,11 @@
 
 	<div th:insert="fragments/head.html::head" th:remove="tag"></div>
 
-    <!--SOLO EN ESTA PAGINA-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-
-
 <body>
-   <div class="container px-5 pt-0 mt-0 bg-secondary rounded">
+     <!--SOLO EN ESTA PAGINA-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    
+   <div class="container px-5 pt-0 mt-0 bg-gray rounded">
         <div id="myTab" role="tablist">
             <div id="back" class="py-3 px-1 mx-2">
                 <a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Back</a>
