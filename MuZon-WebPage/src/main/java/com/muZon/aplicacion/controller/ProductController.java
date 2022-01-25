@@ -72,7 +72,7 @@ public class ProductController {
 		model.addAttribute("productForm", new Product());
 		model.addAttribute("roles", roles);
 
-		return "user-form/sellForm";
+		return "products-form/sellForm";
 	}
 
 	@PostMapping("/addProduct/{id}")
@@ -133,7 +133,7 @@ public class ProductController {
 		Product productToDisplay = productRepository.findById(id).orElseThrow();
 		model.addAttribute("product", productToDisplay);
 
-		return "user-form/buyProduct";
+		return "products-form/buyProduct";
 	}
 
 	@PostMapping("/displayProducts")
@@ -162,13 +162,13 @@ public class ProductController {
 
 			model.addAttribute("categoryList", categoryList);
 
-			return "user-form/productsPage";
+			return "products-form/productsPage";
 		} else {
 			String idP = data.split("[=]")[1];
 			Product productToDisplay = productRepository.findById(Long.valueOf(idP)).orElseThrow();
 			model.addAttribute("product", productToDisplay);
 
-			return "user-form/buyProduct";
+			return "products-form/buyProduct";
 		}
 	}
 
@@ -226,6 +226,7 @@ public class ProductController {
 
 		for(Cart cart : cartList){
 			productService.addBuyNow(cart.getProductId(), cart.getQuantity(), user);
+			productService.changeStock(cart.getProductId(), cart.getProductId().getQuantity() - cart.getQuantity());
 		}
 
 		productService.deleteCart(user.get());

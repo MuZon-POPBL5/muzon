@@ -57,7 +57,7 @@
 					th:classappend=" ${userTab}" id="uHome" role="tabpanel" aria-labelledby="list-tab">
 					<div class="card">
 						<div class="card-body">
-							<div th:include="user-form/shop.html" th:remove="tag"></div>
+							<div th:include="products-form/shop.html" th:remove="tag"></div>
 						</div>
 					</div>
 				</div>
@@ -65,7 +65,7 @@
 					th:classappend=" ${sellTab}" id="uSell" role="tabpanel" aria-labelledby="list-tab">
 					<div class="card">
 						<div class="card-body">
-							<div th:include="user-form/sellForm.html" th:remove="tag"></div>
+							<div th:include="products-form/sellForm.html" th:remove="tag"></div>
 						</div>
 					</div>
 				</div>
@@ -73,7 +73,7 @@
 					th:classappend=" ${cartTab}" id="uCart" role="tabpanel" aria-labelledby="list-tab">
 					<div class="card">
 						<div class="card-body">
-							<div th:include="user-form/cart.html" th:remove="tag"></div>
+							<div th:include="products-form/cart.html" th:remove="tag"></div>
 						</div>
 					</div>
 				</div>

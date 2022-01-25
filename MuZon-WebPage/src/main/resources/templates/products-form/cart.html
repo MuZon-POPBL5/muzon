@@ -3,6 +3,7 @@
 
 
 
+
      <div class="d-flex flex-wrap justify-content-between">
         <div>
             <tr th:each="product: ${cartList}">
@@ -21,7 +22,7 @@
                             th:text="${product.quantity}">
                         </p>
                     </div>
-                    <div class="col-2 p-2">
+                    <div class="col-2 p-2 ml-2">
                         <div class="d-inline-flex">
                             <h4 class="price card-text text-dark" th:text="${product.price}"></h4>
                             <h4 class="price">€</h4>
