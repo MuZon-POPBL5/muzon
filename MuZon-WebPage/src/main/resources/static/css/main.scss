@@ -1,5 +1,37 @@
 
-$primary:       #5dcfc4 ;
+$primary: #5dcfc4 ;
+
+.bg-secondary {
+    background-color: #d3d5d8 !important;
+}
+
+.w-15 {
+    width: 15%!important;
+}
+
+@media (min-width:768px) {
+    .w-md-50{
+        width: 50%!important;
+    }
+
+    .w-md-75{
+        width: 75%!important;
+    }
+
+    .flex-md-row{
+        flex-direction: row!important;
+    }
+    
+    .w-lg-50{
+        width: 50%!important;
+    }
+}
+
+@media (min-width:1200px){
+    .w-lg-100{
+        width: 100%!important;
+    }
+}
 
 fieldset {
     background-color: #eeeeee;
