@@ -8,7 +8,7 @@
   <div class="row d-flex g-5 mx-4 mt-1 mb-5 align-items-center justify-content-between">
     <tr th:each="product: ${categoryList}">
       <!--<td th:text="${product.id}"></td>     PASAR AQUI ID DE USER PARA PODER PASAR EN EL SCRIPT-->
-      <div class="col">
+      <div class="col" th:if="${product.quantity} != 0">
         <div class="card">
           <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
             <img src="" class="card-img-top text-dark" alt="Product image">
