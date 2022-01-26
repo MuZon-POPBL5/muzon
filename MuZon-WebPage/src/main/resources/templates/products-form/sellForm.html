@@ -33,7 +33,7 @@
 
 					<div class="d-flex justify-content-between flex-nowrap">
 						<textarea class="form-control mr-1" th:field="${productForm.description}"
-							th:disabled="${disableFields}" required placeholder="Description" rows="3"></textarea>
+							th:disabled="${disableFields}" placeholder="Description" rows="3"></textarea>
 						<div class="alert-danger" th:if="${#fields.hasErrors('description')}"
 							th:errors="*{description}">Name Error
 						</div>
@@ -51,7 +51,7 @@
 
 							<div class="form-floating mb-1">
 								<input class="form-control" id="floatingInput" type="number"
-									th:field="${productForm.price}" min="0" th:disabled="${disableFields}" required>
+									th:field="${productForm.price}" min="0" th:disabled="${disableFields}" step="0.01" required>
 								<label for="floatingInput">Price</label>
 								<div class="alert-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">
 									Name

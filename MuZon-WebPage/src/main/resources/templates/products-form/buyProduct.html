@@ -126,6 +126,7 @@
                     if (http.status === 200) {
                         $("#success").removeClass("d-none");
                         $("#added").addClass("d-none");
+                        setTimeout(() => { location.reload(); }, 2000);
                     }
                 }
 
