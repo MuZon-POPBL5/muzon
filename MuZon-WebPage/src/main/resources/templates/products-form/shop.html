@@ -156,7 +156,7 @@
                 <tr th:each="product: ${productList}">
                     <div th:if="${product.quantity} != 0">
                         <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
-                            <h5 class="text-capitalize mx-1 text-black" th:text="${product.name}"></h5>
+                            <h5 class="text-capitalize mx-2 text-black" th:text="${product.name}"></h5>
                         </a>
                     </div>
                 </tr>
