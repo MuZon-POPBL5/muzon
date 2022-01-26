@@ -13,8 +13,8 @@
           <a th:href="@{'/displayProducts/' + ${product.id}}" class="text-decoration-none">
             <img src="" class="card-img-top text-dark" alt="Product image">
             <div class="card-body">
-              <h5 class="card-title text-dark" th:text="${product.name}"></h5>
-              <p class="card-text text-dark" th:text="${product.description}"></p>
+              <h5 class="card-title text-dark text-capitalize" th:text="${product.name}"></h5>
+              <p class="card-text text-dark text-capitalize" th:text="${product.description}"></p>
             </div>
           </a>
         </div>

@@ -10,7 +10,7 @@
 					<span
 						th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
 						<a class="container text-decoration-none btn btn-outline-primary btn-dark-teal mb-4 text-dark" href="#"
-							th:href="@{'/accountSettings/'+ ${user.id}}">My Account</a>
+							th:href="@{'/accountSettings/'+ ${user.id}}">Personal Account</a>
 						<a class="container btn btn-outline-primary btn-dark-teal mb-4 text-decoration-none text-dark"
 							href="#" th:href="@{'/selectAddress/'+ ${user.id}}">Choose your address</a>
 						<button id="myBtn" onclick="displayModal()"
